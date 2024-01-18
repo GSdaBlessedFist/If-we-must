@@ -1,14 +1,14 @@
-import React,{createContext} from "react";
+import React,{createContext,useContext} from "react";
 
-const TaxAmountContext = createContext();
+export const TaxAmountContext = React.createContext();
 
-const TaxAmountProvider = ({value,children})=>{
-	
+const TaxAmountProvider = ({children})=>{
+	const TAX_AMOUNT = 5000;
+
 	return (<>
-		<TaxAmountContext.Provider value={value}>
+		<TaxAmountContext.Provider value={TAX_AMOUNT}>
 			{children}
 		</TaxAmountContext.Provider>		
 	</>)
 }
 export default TaxAmountProvider;
-export {TaxAmountContext};
