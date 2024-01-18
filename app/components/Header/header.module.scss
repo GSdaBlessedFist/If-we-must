@@ -1,0 +1,29 @@
+@import "../../styles/mixins.scss";
+
+.header {
+  grid-area: header;
+  @apply w-full;
+  @at-root {
+    .categoryForm {
+      @at-root {
+        .taxAmountLine {
+          @apply flex flex-row justify-center;
+          @include b(orange, 5px);
+          & h3 {
+            margin: 20px 10px;
+          }
+          & input {
+            @apply w-16 m-3 text-xl;
+          }
+        }
+        .buttonSection {
+          @apply flex flex-row justify-between p-4;
+          @include b(orange,5px);
+        }
+        .catergoryInput{
+            
+        }
+      }
+    }
+  }
+}

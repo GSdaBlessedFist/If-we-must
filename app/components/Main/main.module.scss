@@ -1,0 +1,8 @@
+@import "../../styles/mixins.scss";
+
+.main{
+    grid-area: main;
+    @apply flex justify-around items-center;
+    @include b(orange,4px);
+  }
+

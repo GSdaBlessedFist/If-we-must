@@ -1,0 +1,3 @@
+@mixin b($c:red,$w:2px){
+    border: $w $c solid;
+  }

@@ -1,0 +1,38 @@
+@import "../../styles/mixins.scss";
+
+.categoryContainer {
+    width: clamp(100px, 125px, 125px);
+    height: 150px;
+    @at-root {
+        .title {
+            @apply text-center;
+        }
+        .middle {
+            @apply grid;
+            grid-template-columns: 1fr 50% 1fr;
+            grid-template-areas: "dollar amount percent";
+            @at-root {
+                .dollar {
+                    grid-area: dollar;
+                    @apply flex justify-center items-center;
+                }
+                .input {
+                    grid-area: amount;
+                    @apply inline w-full my-8 mx-0 text-2xl;
+                }
+                .percent {
+                    grid-area: percent;
+                    @apply flex justify-center items-center;
+                }
+            }
+        }
+        .amount {
+            @at-root{
+                .amountHeader {
+
+                }
+            }
+        }
+    }
+    @include b(green,5px);
+}
