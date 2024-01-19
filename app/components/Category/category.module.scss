@@ -20,12 +20,15 @@
             @at-root {
                 .dollar {
                     grid-area: dollar;
-                    @apply flex justify-center items-center text-3xl bg-gradient-to-r from-primary-faded to-transparent hover:bg-primary-fadedHover text-bright-full overflow-hidden;
+                    @apply flex justify-center items-center text-3xl bg-gradient-to-r from-primary-faded to-transparent hover:bg-primary-fadedHover text-bright-full overflow-hidden active:bg-primary-fadedHover;
                     
                 }
                 .input {
                     grid-area: amount;
-                    @apply inline w-full my-8 mx-0 text-2xl;
+                    @apply inline w-full my-8 mx-0 text-center text-2xl text-bright-full bg-mid ;
+                }
+                .input::placeholder{
+                    @apply text-sm;
                 }
                 .percent {
                     grid-area: percent;

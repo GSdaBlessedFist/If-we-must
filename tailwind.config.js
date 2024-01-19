@@ -10,7 +10,7 @@ module.exports = {
       colors: {
         'primary': {
           'faded': 'rgba(30, 64, 175,0.15)',
-          'fadedHover':'rgba(30, 64, 175,0.25)',
+          'fadedHover':'rgba(30, 64, 175,0.35)',
           'full': '#1e40af',//blue-600
         },
         'bright': {
