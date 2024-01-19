@@ -2,7 +2,7 @@
 
 .main{
     grid-area: main;
-    @apply flex justify-around items-center;
-    @include b(orange,4px);
+    @apply flex justify-between items-center   bg-dark;
+    //@include b(orange,4px);
   }
 

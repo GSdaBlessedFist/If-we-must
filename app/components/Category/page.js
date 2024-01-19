@@ -1,9 +1,8 @@
 import React,{useState} from "react";
-
 import styles from "./category.module.scss";
 
 
-export default function Category() {
+export default function Category({categoryName}) {
 
   const [mode, setMode] = useState("dollar");
   
@@ -25,7 +24,7 @@ export default function Category() {
     <>
       <div className={styles.categoryContainer} key="" data-name=""  data-amountentered={null} data-mode={mode} >
         <div className={styles.title}>
-          <div>CAT TITLE</div>
+          <div>{categoryName}</div>
         </div>
         <div className={styles.middle}>
           <a href="#" className={styles.dollar} onClick={dollarClickHandler}>
@@ -37,7 +36,7 @@ export default function Category() {
           </a>
         </div>
         <div className={styles.amount}>
-          <div className={styles.amountHeader}></div>
+          <div className={styles.amountHeader}>calculated</div>
         </div>
       </div>
     </>

@@ -2,19 +2,26 @@
 
 .categoryContainer {
     width: clamp(100px, 125px, 125px);
-    height: 150px;
+    height: 200px;
+    @apply grid bg-primary-full rounded-xl mx-4;
+    grid-template-rows:  50px 100px 50px;
+    grid-template-areas: "title"
+                         "input"
+                         "calculated";
     @at-root {
         .title {
-            @apply text-center;
+            grid-area: title;
+            @apply flex justify-center items-center text-center text-bright-full leading-5 font-semibold;
         }
         .middle {
-            @apply grid;
+            @apply grid h-full bg-dark;
             grid-template-columns: 1fr 50% 1fr;
             grid-template-areas: "dollar amount percent";
             @at-root {
                 .dollar {
                     grid-area: dollar;
-                    @apply flex justify-center items-center;
+                    @apply flex justify-center items-center text-3xl bg-gradient-to-r from-primary-faded to-transparent hover:bg-primary-fadedHover text-bright-full overflow-hidden;
+                    
                 }
                 .input {
                     grid-area: amount;
@@ -22,17 +29,19 @@
                 }
                 .percent {
                     grid-area: percent;
-                    @apply flex justify-center items-center;
+                    @apply flex justify-center items-center text-3xl bg-gradient-to-l from-primary-faded to-transparent hover:bg-primary-fadedHover text-bright-full overflow-hidden;
+                    
                 }
             }
         }
         .amount {
+            @apply flex justify-center items-center;
             @at-root{
                 .amountHeader {
-
+                    @apply text-bright-full;
                 }
             }
         }
     }
-    @include b(green,5px);
+    //@include b(green,5px);
 }

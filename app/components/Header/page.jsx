@@ -2,15 +2,20 @@
 import styles from "./header.module.scss";
 import { useContext } from "react";
 import {TaxAmountContext} from "../../contexts/TaxAmountProvider";
-
+import validate from "./validator";
 
 export default function Header(){
 	
   const {TAX_AMOUNT,updateTaxAmount} = useContext(TaxAmountContext);
 
-  function handleTaxAmountUpdate(e){
-    updateTaxAmount(e.target.value)
+  function handleTaxAmountUpdate(e) {
+    const inputValue = e.target.value;
+    // if (validate(inputValue)) {
+    //   console.log("good tax amount")
+      updateTaxAmount(inputValue);
+    //}
   }
+
 	return (
 		<div className={styles.header}>
         

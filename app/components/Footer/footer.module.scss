@@ -1,5 +1,13 @@
 @import "../../styles/mixins.scss";
 
 .footer{
-    
+    @apply bg-primary-full p-3 ;
+    @at-root{
+        .mainText{
+            @apply text-xl text-bright-full text-center;
+        }
+        .noticeText{
+            @apply text-base text-bright-full px-12 opacity-75;
+        }
+    }
 }

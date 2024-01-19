@@ -2,23 +2,23 @@
 
 .header {
   grid-area: header;
-  @apply w-full bg-primary;
+  @apply w-full bg-primary-full text-bright-full;
   @at-root {
     .categoryForm {
       @at-root {
         .taxAmountLine {
-          @apply flex flex-row justify-center;
-          @include b(orange, 5px);
+          @apply flex flex-row justify-center text-2xl;
+          //@include b(orange, 5px);
           & h3 {
             margin: 20px 10px;
           }
           & input {
-            @apply w-16 m-3 ml-0 text-xl px-2;
+            @apply w-24 m-3 ml-0 text-xl text-center text-bright-full bg-mid rounded-xl;
           }
         }
         .buttonSection {
-          @apply flex flex-row justify-between p-4;
-          @include b(orange,5px);
+          @apply flex flex-row justify-between p-4 bg-bright-full text-primary-full;
+          //@include b(orange,5px);
         }
         .catergoryInput{
             

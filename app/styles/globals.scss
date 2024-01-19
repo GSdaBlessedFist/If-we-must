@@ -2,3 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body{
+    @apply w-full h-full flex justify-center items-center bg-gradient-to-b from-dark to-black;
+}

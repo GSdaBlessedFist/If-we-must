@@ -6,10 +6,21 @@ module.exports = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    colors: {
-      'primary': '#2563eb',//blue-600
-      'bright': '#cbd5e1',//slate-300
-      'dark': '#0f172a'//slate-900
+    extend:{
+      colors: {
+        'primary': {
+          'faded': 'rgba(30, 64, 175,0.15)',
+          'fadedHover':'rgba(30, 64, 175,0.25)',
+          'full': '#1e40af',//blue-600
+        },
+        'bright': {
+          'faded': 'rgba(203, 213, 225, 0.15)',
+          'fadedHover': 'rgba(203, 213, 225, 0.25)',
+          "full": '#cbd5e1',//slate-300
+        },
+        'mid':'#64748b',
+        'dark': '#0f172a'//slate-900
+      }
     },
   },
   plugins: [],
