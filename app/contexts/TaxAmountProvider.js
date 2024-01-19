@@ -1,14 +1,18 @@
-import React,{createContext} from "react";
+import React, {useState, createContext } from "react";
 
-const TaxAmountContext = createContext();
+export const TaxAmountContext = createContext();
 
-const TaxAmountProvider = ({value,children})=>{
-	
-	return (<>
-		<TaxAmountContext.Provider value={value}>
-			{children}
-		</TaxAmountContext.Provider>		
-	</>)
-}
-export default TaxAmountProvider;
-export {TaxAmountContext};
+export const TaxAmountProvider = ({ children }) => {
+
+  const [TAX_AMOUNT,setTAX_AMOUNT] = useState(0);
+  
+  function updateTaxAmount(amount){
+	setTAX_AMOUNT(amount);
+  }
+  const contextValue = {TAX_AMOUNT,updateTaxAmount};
+  return (
+      <TaxAmountContext.Provider value={contextValue}>
+        {children}
+      </TaxAmountContext.Provider>
+  );
+};

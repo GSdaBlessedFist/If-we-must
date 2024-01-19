@@ -1,21 +1,23 @@
 //Header
 import styles from "./header.module.scss";
+import { useContext } from "react";
+import {TaxAmountContext} from "../../contexts/TaxAmountProvider";
 
 
-
-export default function Header({TAX_AMOUNT,setTAX_AMOUNT}){
+export default function Header(){
 	
+  const {TAX_AMOUNT,updateTaxAmount} = useContext(TaxAmountContext);
 
-  function updateTaxAmount(e){
-    setTAX_AMOUNT(e.target.value)
+  function handleTaxAmountUpdate(e){
+    updateTaxAmount(e.target.value)
   }
-	return (<>
+	return (
 		<div className={styles.header}>
         
         <form className={styles.categoryForm}>
           <div className={styles.taxAmountLine}>
             <h3>Taxable Amount: ${TAX_AMOUNT}</h3>
-            <input type="text" className={"header--taxAmount"} value={TAX_AMOUNT} onChange={updateTaxAmount} maxLength="5"/>
+            <input type="text" className={"header--taxAmount"} value={TAX_AMOUNT} onChange={handleTaxAmountUpdate} maxLength="5"/>
           </div>
           <div className={styles.buttonSection}>
             <input className={styles.catergoryInput} name="SpaceEx" type="checkbox" id="spaceEx" />
@@ -35,6 +37,5 @@ export default function Header({TAX_AMOUNT,setTAX_AMOUNT}){
           </div>
         </form>
 
-      </div>
-	</>)
+      </div>)
 }
