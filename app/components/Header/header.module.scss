@@ -2,7 +2,7 @@
 
 .header {
   grid-area: header;
-  @apply w-full;
+  @apply w-full bg-primary;
   @at-root {
     .categoryForm {
       @at-root {
@@ -13,7 +13,7 @@
             margin: 20px 10px;
           }
           & input {
-            @apply w-16 m-3 text-xl;
+            @apply w-16 m-3 ml-0 text-xl px-2;
           }
         }
         .buttonSection {

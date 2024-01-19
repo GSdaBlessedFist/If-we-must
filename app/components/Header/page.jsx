@@ -16,8 +16,8 @@ export default function Header(){
         
         <form className={styles.categoryForm}>
           <div className={styles.taxAmountLine}>
-            <h3>Taxable Amount: ${TAX_AMOUNT}</h3>
-            <input type="text" className={"header--taxAmount"} value={TAX_AMOUNT} onChange={handleTaxAmountUpdate} maxLength="5"/>
+            <h3>Taxable Amount: $</h3>
+            <input type="text" className={styles.taxAmount} value={TAX_AMOUNT} onChange={handleTaxAmountUpdate} maxLength="5"/>
           </div>
           <div className={styles.buttonSection}>
             <input className={styles.catergoryInput} name="SpaceEx" type="checkbox" id="spaceEx" />
