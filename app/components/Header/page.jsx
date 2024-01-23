@@ -10,8 +10,7 @@ const p = console.log;
 export default function Header() {
   const { TAX_AMOUNT, updateTaxAmount } = useContext(TaxAmountContext);
   const [isCategorySelected, setIsCategorySelected] = useState(false);
-  // const [listOfCategories, setListOfCategories] = useState([]);
-  const {listOfCategories,updateListOfCategories} = useContext(SelectedCategoriesContext);
+  const {listOfCategories,categoryObjectsArray,updateCategoryObjectsArray} = useContext(SelectedCategoriesContext);
 
   function handleTaxAmountUpdate(e) {
     const inputValue = e.target.value;
@@ -21,20 +20,23 @@ export default function Header() {
     //}
   }
 
-  function handleCategorySelectionUpdate(e) {
-    const updatedCategoryList = e.target.checked
-      ? [...listOfCategories, e.target]
-      : listOfCategories.filter((category) => category !== e.target);
+  function handleCategoryObjUpdate(e) {
+    
+      updateCategoryObjectsArray([...categoryObjectsArray,{
+        [e.target.name]: {
+          mode: e.target.mode,
+          amountEntered: e.target.value,
+          remainingAmountDisplayed: 0,
+          selected: e.target.checked,
+        },
+      }]);
 
-      updateListOfCategories(updatedCategoryList);
-
-    console.log( `%c${e.target.name}`, "color: steelblue;font-weight:bold;font-size:1rem", `: ${e.target.checked}`
-    );
   }
 
   useEffect(() => {
-    p(listOfCategories);
-  }, [listOfCategories]);
+    //p(TAX_AMOUNT)
+    //p(listOfCategories);
+  }, [listOfCategories,TAX_AMOUNT]);
 
   return (
     <div className={styles.header}>
@@ -55,7 +57,7 @@ export default function Header() {
             name="Space Exploration"
             type="checkbox"
             id="spaceEx"
-            onChange={handleCategorySelectionUpdate}
+            onChange={handleCategoryObjUpdate}
           />
           <label>Space Exploration</label>
 
@@ -64,7 +66,7 @@ export default function Header() {
             name="Military"
             type="checkbox"
             id="military"
-            onChange={handleCategorySelectionUpdate}
+            onChange={handleCategoryObjUpdate}
           />
           <label>Military</label>
 
@@ -73,7 +75,7 @@ export default function Header() {
             name="Housing"
             type="checkbox"
             id="housing"
-            onChange={handleCategorySelectionUpdate}
+            onChange={handleCategoryObjUpdate}
           />
           <label>Housing</label>
 
@@ -82,7 +84,7 @@ export default function Header() {
             name="Medicine"
             type="checkbox"
             id="medicine"
-            onChange={handleCategorySelectionUpdate}
+            onChange={handleCategoryObjUpdate}
           />
           <label>Medicine</label>
 
@@ -91,7 +93,7 @@ export default function Header() {
             name="Infrastructure"
             type="checkbox"
             id="infrastructure"
-            onChange={handleCategorySelectionUpdate}
+            onChange={handleCategoryObjUpdate}
           />
           <label>Infrastructure</label>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react";
+import React, { useEffect,useState, createContext } from "react";
 
 export const TaxAmountContext = createContext();
 
@@ -8,6 +8,7 @@ export const TaxAmountProvider = ({ children }) => {
   function updateTaxAmount(amount) {
     setTAX_AMOUNT(amount);
   }
+
   const contextValue = { TAX_AMOUNT, updateTaxAmount };
   return (
     <TaxAmountContext.Provider value={contextValue}>
