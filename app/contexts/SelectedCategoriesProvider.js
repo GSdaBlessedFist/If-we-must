@@ -1,5 +1,5 @@
-
-import React, { useState, createContext,useEffect } from "react";
+//SelectedCategoriesProvider.js
+import React, { useState, createContext, useEffect } from "react";
 import { categoryObjects } from "../categoryObjects";
 
 // type Category = {
@@ -23,22 +23,14 @@ export const SelectedCategoriesContext = createContext();
 const catObjs = categoryObjects;
 const p = console.log;
 
-
-
 export const SelectedCategoriesProvider = ({ children }) => {
   const [categoryObjectsArray, setCategoryObjectsArray] = useState(catObjs);
   const [listOfCategories, setListOfCategories] = useState([]);
-  const [divisor, setDivisor] = useState(1);
 
   // array -> selected list
   function updateCategoryObjectsArray(categoryObjList) {
     setCategoryObjectsArray(categoryObjList);
   }
-
-  useEffect(() => {
-    setDivisor(listOfCategories.length);
-    //p(listOfCategories)
-  }, [listOfCategories]);
 
   useEffect(() => {
     const selectedObjectsList = categoryObjectsArray.filter((obj) => {
@@ -49,11 +41,33 @@ export const SelectedCategoriesProvider = ({ children }) => {
       }
       return false;
     });
+
+    function removeDuplicates(list) {
+      const objMap = new Map();
+
+      list.forEach((obj) => {
+        let key = JSON.stringify(obj);
+        objMap.set(key, obj);
+      });
+
+      let noDups = Array.from(objMap.values());
+      return noDups;
+    }
+    const noDupsList = removeDuplicates(selectedObjectsList);
+    p(noDupsList);
+
     setListOfCategories(selectedObjectsList);
-    
   }, [categoryObjectsArray]);
 
-  const contextValue = { listOfCategories, categoryObjectsArray, updateCategoryObjectsArray, divisor };
+  useEffect(() => {
+    p(listOfCategories.length);
+  }, [listOfCategories]);
+
+  const contextValue = {
+    listOfCategories,
+    categoryObjectsArray,
+    updateCategoryObjectsArray,
+  };
 
   return (
     <SelectedCategoriesContext.Provider value={contextValue}>

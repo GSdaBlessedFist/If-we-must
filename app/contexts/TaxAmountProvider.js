@@ -3,7 +3,7 @@ import React, { useEffect,useState, createContext } from "react";
 export const TaxAmountContext = createContext();
 
 export const TaxAmountProvider = ({ children }) => {
-  const [TAX_AMOUNT, setTAX_AMOUNT] = useState(0);
+  const [TAX_AMOUNT, setTAX_AMOUNT] = useState("");
 
   function updateTaxAmount(amount) {
     setTAX_AMOUNT(amount);

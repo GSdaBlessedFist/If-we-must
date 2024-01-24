@@ -4,7 +4,10 @@ export const categoryObjects = [
   {
     "Space exploration": {
       mode: "dollar",
-      amountEntered: 0,
+      amountEntered: {
+        specified: false,
+        amount: 0
+      },
       remainingAmountDisplayed: 0,
       selected: false,
     },
@@ -12,7 +15,10 @@ export const categoryObjects = [
   {
     "Military": {
       mode: "dollar",
-      amountEntered: 0,
+      amountEntered: {
+        specified: false,
+        amount: 0
+      },
       remainingAmountDisplayed: 0,
       selected: false,
     },
@@ -20,7 +26,10 @@ export const categoryObjects = [
   {
     "Housing": {
       mode: "dollar",
-      amountEntered: 0,
+      amountEntered: {
+        specified: false,
+        amount: 0
+      },
       remainingAmountDisplayed: 0,
       selected: false,
     },
@@ -28,7 +37,10 @@ export const categoryObjects = [
   {
     "Medicine": {
       mode: "dollar",
-      amountEntered: 0,
+      amountEntered: {
+        specified: false,
+        amount: 0
+      },
       remainingAmountDisplayed: 0,
       selected: false,
     },
@@ -36,7 +48,10 @@ export const categoryObjects = [
   {
     "Infrastructure": {
       mode: "dollar",
-      amountEntered: 0,
+      amountEntered: {
+        specified: false,
+        amount: 0
+      },
       remainingAmountDisplayed: 0,
       selected: false,
     },

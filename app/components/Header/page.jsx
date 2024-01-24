@@ -20,16 +20,38 @@ export default function Header() {
     //}
   }
 
-  function handleCategoryObjUpdate(e) {
+  function handleCategoryObjectsArrayUpdate(e) {
+    const updatedCategoryObjectsArray = categoryObjectsArray.map((categoryObj) => {
+      const categoryName = e.target.name;
+  
+      if (categoryObj[categoryName]) {
+        // If the category object already exists, update its 'selected' property
+        return {
+          [categoryName]: {
+            ...categoryObj[categoryName],
+            selected: e.target.checked,
+          },
+        };
+      }
+  
+      return categoryObj;
+    });
     
-      updateCategoryObjectsArray([...categoryObjectsArray,{
+    if (!categoryObjectsArray.some((categoryObj) => categoryObj[e.target.name])) {
+      updatedCategoryObjectsArray.push({
         [e.target.name]: {
-          mode: e.target.mode,
-          amountEntered: e.target.value,
+          mode: "dollar",
+          amountEntered: {
+            specified: false,
+            amount: 0,
+          },
           remainingAmountDisplayed: 0,
           selected: e.target.checked,
         },
-      }]);
+      });
+    }
+  
+    updateCategoryObjectsArray(updatedCategoryObjectsArray);
 
   }
 
@@ -48,7 +70,7 @@ export default function Header() {
             className={styles.taxAmount}
             value={TAX_AMOUNT}
             onChange={handleTaxAmountUpdate}
-            maxLength="5"
+            maxLength="5" 
           />
         </div>
         <div className={styles.buttonSection}>
@@ -57,7 +79,8 @@ export default function Header() {
             name="Space Exploration"
             type="checkbox"
             id="spaceEx"
-            onChange={handleCategoryObjUpdate}
+            onChange={handleCategoryObjectsArrayUpdate}
+            disabled={TAX_AMOUNT === ""}
           />
           <label>Space Exploration</label>
 
@@ -66,7 +89,8 @@ export default function Header() {
             name="Military"
             type="checkbox"
             id="military"
-            onChange={handleCategoryObjUpdate}
+            onChange={handleCategoryObjectsArrayUpdate}
+            disabled={TAX_AMOUNT === ""}
           />
           <label>Military</label>
 
@@ -75,7 +99,8 @@ export default function Header() {
             name="Housing"
             type="checkbox"
             id="housing"
-            onChange={handleCategoryObjUpdate}
+            onChange={handleCategoryObjectsArrayUpdate}
+            disabled={TAX_AMOUNT === ""}
           />
           <label>Housing</label>
 
@@ -84,7 +109,8 @@ export default function Header() {
             name="Medicine"
             type="checkbox"
             id="medicine"
-            onChange={handleCategoryObjUpdate}
+            onChange={handleCategoryObjectsArrayUpdate}
+            disabled={TAX_AMOUNT === ""}
           />
           <label>Medicine</label>
 
@@ -93,7 +119,8 @@ export default function Header() {
             name="Infrastructure"
             type="checkbox"
             id="infrastructure"
-            onChange={handleCategoryObjUpdate}
+            onChange={handleCategoryObjectsArrayUpdate}
+            disabled={TAX_AMOUNT === ""}
           />
           <label>Infrastructure</label>
         </div>

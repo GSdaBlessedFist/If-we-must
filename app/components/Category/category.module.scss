@@ -20,8 +20,10 @@
             @at-root {
                 .dollar {
                     grid-area: dollar;
-                    @apply flex justify-center items-center text-3xl bg-gradient-to-r from-primary-faded to-transparent hover:bg-primary-fadedHover text-bright-full overflow-hidden active:bg-primary-fadedHover;
-                    
+                    @apply flex justify-center items-center text-3xl bg-gradient-to-r from-primary-faded to-transparent hover:bg-primary-fadedHover text-bright-full overflow-hidden active:bg-primary-fadedHover;    
+                }
+                .modeSelected{
+                    @apply bg-primary-faded border-2 border-primary-full;
                 }
                 .input {
                     grid-area: amount;
