@@ -2,11 +2,11 @@
 
 .primeContainer {
   width: clamp(680px, 77%, 800px);
-  @apply m-24 h-96 grid overflow-hidden;
-  grid-template-rows: 1fr 200px 1fr;
+  @apply mx-auto h-[500px] grid overflow-hidden rounded-3xl border-8 border-primary-full;
+  grid-template-rows: 1fr 250px 1fr;
   grid-template-areas:
     "header"
     "main"
     "footer";
-  @include b;
+  //@include b;
 }

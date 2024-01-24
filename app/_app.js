@@ -1,18 +1,8 @@
-import React,{useEffect,useState} from "react";
-import "@/styles/globals.scss"; // Import global styles
-import {TaxAmountProvider} from "@/app/contexts/TaxAmountProvider"; //"
-
+import React, { useState } from "react";
+import "@/styles/globals.scss";
 
 function App({ Component, pageProps }) {
-  
-  
-  return (
-    <>
-      <TaxAmountProvider >
-        <Component {...pageProps} />
-      </TaxAmountProvider>
-    </>
-  );
+  return <Component {...pageProps} />;
 }
 
 export default App;

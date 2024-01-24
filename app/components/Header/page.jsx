@@ -1,9 +1,18 @@
 //Header
 import { useEffect,useState,useContext } from "react";
 import styles from "./header.module.scss";
+<<<<<<< HEAD
 import  {TaxAmountContext}  from "@/app/contexts/TaxAmountProvider";
+=======
+import { useContext, useState, useEffect } from "react";
+import { TaxAmountContext } from "../../contexts/TaxAmountProvider";
+import {SelectedCategoriesContext } from "../../contexts/SelectedCategoriesProvider";
+import validate from "./validator";
+>>>>>>> dev
 
+const p = console.log;
 
+<<<<<<< HEAD
 export default function Header(){
   const { TAX_AMOUNT} = useContext(TaxAmountContext);
 
@@ -26,21 +35,126 @@ export default function Header(){
           <div className={styles.buttonSection}>
             <input className={styles.catergoryInput} name="SpaceEx" type="checkbox" id="spaceEx" />
             <label>Space Exploration</label>
+=======
+export default function Header() {
+  const { TAX_AMOUNT, updateTaxAmount } = useContext(TaxAmountContext);
+  const [isCategorySelected, setIsCategorySelected] = useState(false);
+  const {listOfCategories,categoryObjectsArray,updateCategoryObjectsArray} = useContext(SelectedCategoriesContext);
 
-            <input className={styles.catergoryInput} type="checkbox" id="military" />
-            <label>Military</label>
+  function handleTaxAmountUpdate(e) {
+    const inputValue = e.target.value;
+    // if (validate(inputValue)) {
+    //   console.log("good tax amount")
+    updateTaxAmount(inputValue);
+    //}
+  }
+>>>>>>> dev
 
-            <input className={styles.catergoryInput} type="checkbox" id="housing" />
-            <label>Housing</label>
+  function handleCategoryObjectsArrayUpdate(e) {
+    const updatedCategoryObjectsArray = categoryObjectsArray.map((categoryObj) => {
+      const categoryName = e.target.name;
+  
+      if (categoryObj[categoryName]) {
+        // If the category object already exists, update its 'selected' property
+        return {
+          [categoryName]: {
+            ...categoryObj[categoryName],
+            selected: e.target.checked,
+          },
+        };
+      }
+  
+      return categoryObj;
+    });
+    
+    if (!categoryObjectsArray.some((categoryObj) => categoryObj[e.target.name])) {
+      updatedCategoryObjectsArray.push({
+        [e.target.name]: {
+          mode: "dollar",
+          amountEntered: {
+            specified: false,
+            amount: 0,
+          },
+          remainingAmountDisplayed: 0,
+          selected: e.target.checked,
+        },
+      });
+    }
+  
+    updateCategoryObjectsArray(updatedCategoryObjectsArray);
 
-            <input className={styles.catergoryInput} type="checkbox" id="medicine" />
-            <label>Medicine</label>
+  }
 
-            <input className={styles.catergoryInput} type="checkbox" id="infrastructure" />
-            <label>Infrastructure</label>
-          </div>
-        </form>
+  useEffect(() => {
+    //p(TAX_AMOUNT)
+    //p(listOfCategories);
+  }, [listOfCategories,TAX_AMOUNT]);
 
-      </div>
-	</>)
+  return (
+    <div className={styles.header}>
+      <form className={styles.categoryForm}>
+        <div className={styles.taxAmountLine}>
+          <h3>Taxable Amount: $</h3>
+          <input
+            type="text"
+            className={styles.taxAmount}
+            value={TAX_AMOUNT}
+            onChange={handleTaxAmountUpdate}
+            maxLength="5" 
+          />
+        </div>
+        <div className={styles.buttonSection}>
+          <input
+            className={styles.catergoryInput}
+            name="Space Exploration"
+            type="checkbox"
+            id="spaceEx"
+            onChange={handleCategoryObjectsArrayUpdate}
+            disabled={TAX_AMOUNT === ""}
+          />
+          <label>Space Exploration</label>
+
+          <input
+            className={styles.catergoryInput}
+            name="Military"
+            type="checkbox"
+            id="military"
+            onChange={handleCategoryObjectsArrayUpdate}
+            disabled={TAX_AMOUNT === ""}
+          />
+          <label>Military</label>
+
+          <input
+            className={styles.catergoryInput}
+            name="Housing"
+            type="checkbox"
+            id="housing"
+            onChange={handleCategoryObjectsArrayUpdate}
+            disabled={TAX_AMOUNT === ""}
+          />
+          <label>Housing</label>
+
+          <input
+            className={styles.catergoryInput}
+            name="Medicine"
+            type="checkbox"
+            id="medicine"
+            onChange={handleCategoryObjectsArrayUpdate}
+            disabled={TAX_AMOUNT === ""}
+          />
+          <label>Medicine</label>
+
+          <input
+            className={styles.catergoryInput}
+            name="Infrastructure"
+            type="checkbox"
+            id="infrastructure"
+            onChange={handleCategoryObjectsArrayUpdate}
+            disabled={TAX_AMOUNT === ""}
+          />
+          <label>Infrastructure</label>
+        </div>
+      </form>
+    </div>
+  );
 }
