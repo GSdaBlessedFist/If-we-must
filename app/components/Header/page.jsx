@@ -1,41 +1,12 @@
 //Header
 import { useEffect,useState,useContext } from "react";
 import styles from "./header.module.scss";
-<<<<<<< HEAD
-import  {TaxAmountContext}  from "@/app/contexts/TaxAmountProvider";
-=======
-import { useContext, useState, useEffect } from "react";
 import { TaxAmountContext } from "../../contexts/TaxAmountProvider";
 import {SelectedCategoriesContext } from "../../contexts/SelectedCategoriesProvider";
 import validate from "./validator";
->>>>>>> dev
 
 const p = console.log;
 
-<<<<<<< HEAD
-export default function Header(){
-  const { TAX_AMOUNT} = useContext(TaxAmountContext);
-
-  // function updateTaxAmount(e){
-  //   setTAX_AMOUNT(e.target.value)
-  // }
-  useEffect(() =>{
-    console.log(`header:
-    TAX_AMOUNT:${TAX_AMOUNT}`);
-  },[]);
-
-	return (<>
-		<div className={styles.header}>
-        
-        <form className={styles.categoryForm}>
-          <div className={styles.taxAmountLine}>
-            <h3>Taxable Amount: ${TAX_AMOUNT}</h3>
-            {/* <input type="text" className={styles.taxAmount} value={TAX_AMOUNT}  maxLength="5"/> */}
-          </div>
-          <div className={styles.buttonSection}>
-            <input className={styles.catergoryInput} name="SpaceEx" type="checkbox" id="spaceEx" />
-            <label>Space Exploration</label>
-=======
 export default function Header() {
   const { TAX_AMOUNT, updateTaxAmount } = useContext(TaxAmountContext);
   const [isCategorySelected, setIsCategorySelected] = useState(false);
@@ -48,7 +19,6 @@ export default function Header() {
     updateTaxAmount(inputValue);
     //}
   }
->>>>>>> dev
 
   function handleCategoryObjectsArrayUpdate(e) {
     const updatedCategoryObjectsArray = categoryObjectsArray.map((categoryObj) => {
