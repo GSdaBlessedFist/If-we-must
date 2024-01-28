@@ -1,5 +1,9 @@
 import React, { useEffect, useState, useContext,createContext } from "react";
 import { TaxAmountContext } from "./TaxAmountProvider";
+import p from "@/app/util/consoleHelper";
+
+const SOURCE = "TotalRemainingAmountPROVIDER";
+const srcColor = 185;
 
 export const TotalRemainingAmountContext = createContext();
 
@@ -20,7 +24,9 @@ export const TotalRemainingAmountProvider = ({ children }) => {
     
   }
   useEffect(()=>{
-    console.log(`PROVIDER: Total Remaining Amount: ${totalRemainingAmount}`)
+
+    p(SOURCE,totalRemainingAmount,srcColor,"Total Remaining Amount")
+
   },[totalRemainingAmount]);
   const contextValue = { totalRemainingAmount, updateTotalRemainingAmount };
 

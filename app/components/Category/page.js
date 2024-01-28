@@ -9,6 +9,7 @@ import { TotalRemainingAmountContext } from "../../contexts/TotalRemainingAmount
 import calculator from "../../util/calculations";
 
 const SOURCE = "Category Component";
+const srcColor = 50;
 
 export default function Category({ categoryName, categoryData }) {
   // const { TAX_AMOUNT } = useContext(TaxAmountContext);
@@ -56,20 +57,13 @@ export default function Category({ categoryName, categoryData }) {
   }, [categoryObj, SelectedCatsContext.listOfCategories]);
 
   useEffect(() => {
-    console.log(
-      `totalRemainingAmount: ${RemainingAmountContext.totalRemainingAmount}`
-    );
-    //console.log(`amountEntered: ${categoryObj.amountEntered.amount}`);
-    p(SOURCE,categoryObj.amountEntered.amount,30,"amount Entered")
-    console.log(
-      calculator(
-        TaxContext.TAX_AMOUNT,
-        1,
-        categoryObj,
-        RemainingAmountContext.totalRemainingAmount
-      )
-    );
-    p(SOURCE,SelectedCatsContext.listOfCategories, 55,"SelectedCatsContext.listOfCategories");
+    
+    p(SOURCE,RemainingAmountContext.totalRemainingAmount,srcColor,"total remaining amount")
+    p(SOURCE,categoryObj.amountEntered.amount,srcColor,"amount Entered")
+    
+    let singleCategoryCalculation = calculator( TaxContext.TAX_AMOUNT, 1, categoryObj, RemainingAmountContext.totalRemainingAmount );
+    p(SOURCE,singleCategoryCalculation,srcColor,"single category calculation");
+    p(SOURCE,SelectedCatsContext.listOfCategories, srcColor,"SelectedCatsContext.listOfCategories");
   }, [
     categoryObj,
     SelectedCatsContext.listOfCategories,
