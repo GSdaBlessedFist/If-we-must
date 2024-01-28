@@ -1,31 +1,31 @@
-//Header
+"use client";
 import { useEffect,useState,useContext } from "react";
 import styles from "./header.module.scss";
 import { TaxAmountContext } from "../../contexts/TaxAmountProvider";
 import {SelectedCategoriesContext } from "../../contexts/SelectedCategoriesProvider";
 import validate from "./validator";
 
-const p = console.log;
+
 
 export default function Header() {
-  const { TAX_AMOUNT, updateTaxAmount } = useContext(TaxAmountContext);
+  
+  const TaxContext = useContext(TaxAmountContext);
   const [isCategorySelected, setIsCategorySelected] = useState(false);
-  const {listOfCategories,categoryObjectsArray,updateCategoryObjectsArray} = useContext(SelectedCategoriesContext);
+  const CategoriesContext = useContext(SelectedCategoriesContext);
 
   function handleTaxAmountUpdate(e) {
     const inputValue = e.target.value;
-    // if (validate(inputValue)) {
-    //   console.log("good tax amount")
-    updateTaxAmount(inputValue);
-    //}
+    
+    TaxContext.updateTaxAmount(inputValue);
+    
   }
 
   function handleCategoryObjectsArrayUpdate(e) {
-    const updatedCategoryObjectsArray = categoryObjectsArray.map((categoryObj) => {
+    const updatedCategoryObjectsArray = CategoriesContext.categoryObjectsArray.map((categoryObj) => {
       const categoryName = e.target.name;
   
       if (categoryObj[categoryName]) {
-        // If the category object already exists, update its 'selected' property
+        
         return {
           [categoryName]: {
             ...categoryObj[categoryName],
@@ -37,7 +37,7 @@ export default function Header() {
       return categoryObj;
     });
     
-    if (!categoryObjectsArray.some((categoryObj) => categoryObj[e.target.name])) {
+    if (!CategoriesContext.categoryObjectsArray.some((categoryObj) => categoryObj[e.target.name])) {
       updatedCategoryObjectsArray.push({
         [e.target.name]: {
           mode: "dollar",
@@ -51,14 +51,11 @@ export default function Header() {
       });
     }
   
-    updateCategoryObjectsArray(updatedCategoryObjectsArray);
+    CategoriesContext.updateCategoryObjectsArray(updatedCategoryObjectsArray);
 
   }
 
-  useEffect(() => {
-    //p(TAX_AMOUNT)
-    //p(listOfCategories);
-  }, [listOfCategories,TAX_AMOUNT]);
+  
 
   return (
     <div className={styles.header}>
@@ -68,7 +65,7 @@ export default function Header() {
           <input
             type="text"
             className={styles.taxAmount}
-            value={TAX_AMOUNT}
+            value={TaxContext.TAX_AMOUNT}
             onChange={handleTaxAmountUpdate}
             maxLength="5" 
           />
@@ -80,7 +77,7 @@ export default function Header() {
             type="checkbox"
             id="spaceEx"
             onChange={handleCategoryObjectsArrayUpdate}
-            disabled={TAX_AMOUNT === ""}
+            disabled={TaxContext.TAX_AMOUNT === ""}
           />
           <label>Space Exploration</label>
 
@@ -90,7 +87,7 @@ export default function Header() {
             type="checkbox"
             id="military"
             onChange={handleCategoryObjectsArrayUpdate}
-            disabled={TAX_AMOUNT === ""}
+            disabled={TaxContext.TAX_AMOUNT === ""}
           />
           <label>Military</label>
 
@@ -100,7 +97,7 @@ export default function Header() {
             type="checkbox"
             id="housing"
             onChange={handleCategoryObjectsArrayUpdate}
-            disabled={TAX_AMOUNT === ""}
+            disabled={TaxContext.TAX_AMOUNT === ""}
           />
           <label>Housing</label>
 
@@ -110,7 +107,7 @@ export default function Header() {
             type="checkbox"
             id="medicine"
             onChange={handleCategoryObjectsArrayUpdate}
-            disabled={TAX_AMOUNT === ""}
+            disabled={TaxContext.TAX_AMOUNT === ""}
           />
           <label>Medicine</label>
 
@@ -120,7 +117,7 @@ export default function Header() {
             type="checkbox"
             id="infrastructure"
             onChange={handleCategoryObjectsArrayUpdate}
-            disabled={TAX_AMOUNT === ""}
+            disabled={TaxContext.TAX_AMOUNT === ""}
           />
           <label>Infrastructure</label>
         </div>

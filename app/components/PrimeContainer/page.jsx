@@ -1,5 +1,4 @@
-//primeContainer
-
+"use client";
 import React, { useState } from "react";
 import Header from "../Header/page";
 import Main from "../Main/page";
@@ -10,7 +9,7 @@ import { SelectedCategoriesProvider } from "../../contexts/SelectedCategoriesPro
 import { TotalRemainingAmountProvider } from "../../contexts/TotalRemainingAmountProvider";
 
 export default function PrimeContainer() {
-  return (
+  return (<>
     <TaxAmountProvider>
       <SelectedCategoriesProvider>
         <TotalRemainingAmountProvider>
@@ -22,5 +21,6 @@ export default function PrimeContainer() {
         </TotalRemainingAmountProvider>
       </SelectedCategoriesProvider>
     </TaxAmountProvider>
-  );
+  </>);
 }
+

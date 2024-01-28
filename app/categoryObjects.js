@@ -1,5 +1,6 @@
 //categoryObjects
 
+
 export const categoryObjects = [
   {
     "Space exploration": {
@@ -57,3 +58,4 @@ export const categoryObjects = [
     },
   },
 ];
+

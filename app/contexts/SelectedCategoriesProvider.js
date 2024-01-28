@@ -1,22 +1,5 @@
-//SelectedCategoriesProvider.js
 import React, { useState, createContext, useEffect } from "react";
 import { categoryObjects } from "../categoryObjects";
-
-// type Category = {
-//   mode: string;
-//   amountEntered: number;
-//   remainingAmountDisplayed: number;
-//   selected: boolean;
-// };
-
-// type CategoryObject = Record<string, Category>;
-
-// type SelectedCategoriesContextProps = {
-//   listOfCategories: CategoryObject[];
-//   categoryObjectsArray: CategoryObject[];
-//   divisor: number;
-//   updateCategoryObjectsArray: (categoryObjList: CategoryObject[]) => void;
-// };
 
 export const SelectedCategoriesContext = createContext();
 
@@ -54,13 +37,21 @@ export const SelectedCategoriesProvider = ({ children }) => {
       return noDups;
     }
     const noDupsList = removeDuplicates(selectedObjectsList);
-    p(noDupsList);
+    if (noDupsList.length === 0) return;
+    console.log(noDupsList);
 
     setListOfCategories(selectedObjectsList);
+
+    
+
   }, [categoryObjectsArray]);
 
   useEffect(() => {
-    p(listOfCategories.length);
+    listOfCategories.forEach((category) => {
+      const categoryName = Object.keys(category)[0];
+      const amountEntered = category[categoryName].amountEntered?.amount;
+      console.log(`${categoryName}: ${amountEntered}`);
+    });
   }, [listOfCategories]);
 
   const contextValue = {
@@ -70,7 +61,13 @@ export const SelectedCategoriesProvider = ({ children }) => {
   };
 
   return (
-    <SelectedCategoriesContext.Provider value={contextValue}>
+    <SelectedCategoriesContext.Provider
+      value={{
+        listOfCategories,
+        categoryObjectsArray,
+        updateCategoryObjectsArray,
+      }}
+    >
       {children}
     </SelectedCategoriesContext.Provider>
   );

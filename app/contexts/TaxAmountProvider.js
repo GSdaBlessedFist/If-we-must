@@ -11,7 +11,7 @@ export const TaxAmountProvider = ({ children }) => {
 
   const contextValue = { TAX_AMOUNT, updateTaxAmount };
   return (
-    <TaxAmountContext.Provider value={contextValue}>
+    <TaxAmountContext.Provider value={{ TAX_AMOUNT, updateTaxAmount }}>
       {children}
     </TaxAmountContext.Provider>
   );
