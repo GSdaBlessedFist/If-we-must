@@ -45,6 +45,7 @@ export default function Header() {
             specified: false,
             amount: 0,
           },
+          modeCalculatedAmount:0,
           remainingAmountDisplayed: 0,
           selected: e.target.checked,
         },

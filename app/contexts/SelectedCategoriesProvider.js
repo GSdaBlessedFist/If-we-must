@@ -1,10 +1,13 @@
 import React, { useState, createContext, useEffect } from "react";
 import { categoryObjects } from "../categoryObjects";
+import p from "@/app/util/consoleHelper";
 
 export const SelectedCategoriesContext = createContext();
 
+const SOURCE = "SelectedCategoriesProvider";
+const srcColor = 185;
+
 const catObjs = categoryObjects;
-const p = console.log;
 
 export const SelectedCategoriesProvider = ({ children }) => {
   const [categoryObjectsArray, setCategoryObjectsArray] = useState(catObjs);
@@ -38,8 +41,8 @@ export const SelectedCategoriesProvider = ({ children }) => {
     }
     const noDupsList = removeDuplicates(selectedObjectsList);
     if (noDupsList.length === 0) return;
-    console.log(noDupsList);
-
+    
+    p(SOURCE,noDupsList,srcColor,"noDupsList")
     setListOfCategories(selectedObjectsList);
 
     
@@ -50,7 +53,9 @@ export const SelectedCategoriesProvider = ({ children }) => {
     listOfCategories.forEach((category) => {
       const categoryName = Object.keys(category)[0];
       const amountEntered = category[categoryName].amountEntered?.amount;
-      console.log(`${categoryName}: ${amountEntered}`);
+      
+      p(SOURCE,categoryName,srcColor,"categoryName")
+      p(SOURCE,amountEntered,srcColor,"amountEntered")
     });
   }, [listOfCategories]);
 

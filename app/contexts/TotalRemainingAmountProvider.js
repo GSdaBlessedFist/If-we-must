@@ -25,7 +25,7 @@ export const TotalRemainingAmountProvider = ({ children }) => {
   }
   useEffect(()=>{
 
-    p(SOURCE,totalRemainingAmount,srcColor,"Total Remaining Amount")
+    //p(SOURCE,totalRemainingAmount,srcColor,"Total Remaining Amount")
 
   },[totalRemainingAmount]);
   const contextValue = { totalRemainingAmount, updateTotalRemainingAmount };
