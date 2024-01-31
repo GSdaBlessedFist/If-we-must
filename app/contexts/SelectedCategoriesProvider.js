@@ -13,10 +13,15 @@ export const SelectedCategoriesProvider = ({ children }) => {
   const [categoryObjectsArray, setCategoryObjectsArray] = useState(catObjs);
   const [listOfCategories, setListOfCategories] = useState([]);
 
+
+
   // array -> selected list
   function updateCategoryObjectsArray(categoryObjList) {
     setCategoryObjectsArray(categoryObjList);
   }
+
+
+
 
   useEffect(() => {
     const selectedObjectsList = categoryObjectsArray.filter((obj) => {
@@ -40,15 +45,31 @@ export const SelectedCategoriesProvider = ({ children }) => {
       return noDups;
     }
     const noDupsList = removeDuplicates(selectedObjectsList);
+
     if (noDupsList.length === 0) {
       setListOfCategories([])
-    };
-    
-    p(SOURCE,noDupsList,srcColor,"noDupsList")
-    setListOfCategories(selectedObjectsList);
+    }else {
+      setListOfCategories(
+        noDupsList.map((category) => {
+          const categoryName = Object.keys(category)[0];
+          const mode = category[categoryName].mode || "dollar";
+          const modeCalculatedAmount =
+            mode === "dollar" ? category[categoryName].amountEntered.amount || 0 : 0;
 
-    
+            p(SOURCE, categoryName, 20);
+            p(SOURCE, modeCalculatedAmount, srcColor, "modeCalculatedAmount");  
+          return {
+            [categoryName]: {
+              ...category[categoryName],
+              mode,
+              modeCalculatedAmount,
+            },
+          };
+        })
+      );
+    }
 
+    p(SOURCE, noDupsList, srcColor, "noDupsList");
   }, [categoryObjectsArray]);
 
   useEffect(() => {
@@ -56,7 +77,7 @@ export const SelectedCategoriesProvider = ({ children }) => {
       const categoryName = Object.keys(category)[0];
       const amountEntered = category[categoryName].amountEntered?.amount;
       
-      p(SOURCE,categoryName,srcColor,"categoryName")
+      p(SOURCE,categoryName,srcColor)
       p(SOURCE,amountEntered,srcColor,"amountEntered")
     });
   }, [listOfCategories]);

@@ -5,7 +5,13 @@ import debounce from "debounce";
 import { TaxAmountContext } from "../../contexts/TaxAmountProvider";
 import { SelectedCategoriesContext } from "../../contexts/SelectedCategoriesProvider";
 import { TotalRemainingAmountContext } from "@/app/contexts/TotalRemainingAmountProvider";
+import p from "@/app/util/consoleHelper";
 import validate from "./validator";
+
+
+const SOURCE = "Header Component";
+const srcColor = 185;
+
 
 export default function Header() {
   const TaxContext = useContext(TaxAmountContext);
@@ -16,6 +22,7 @@ export default function Header() {
   function handleTaxAmountUpdate(e) {
     const inputValue = e.target.value;
     TaxContext.updateTaxAmount(inputValue);
+    
   }
 
   //const debouncedUpdateTaxAmount = debounce(handleTaxAmountUpdate, 1500)
@@ -46,7 +53,6 @@ export default function Header() {
             amount: 0,
           },
           modeCalculatedAmount: 0,
-          remainingAmountDisplayed: 0,
           selected: e.target.checked,
         },
       });
@@ -54,8 +60,21 @@ export default function Header() {
 
     CategoriesContext.updateCategoryObjectsArray(updatedCategoryObjectsArray);
   }
+  //GOOD//
+  useEffect(() => {
+    //p(SOURCE,TaxContext.TAX_AMOUNT,srcColor,"TaxContext.TAX_AMOUNT")
+  },[TaxContext.TAX_AMOUNT]);
 
-  
+  //GOOD
+  useEffect(() => {
+    //p(SOURCE,CategoriesContext.listofCategories,srcColor,"CategoriesContext.listofCategories");
+    //RemainingContext.updateTotalRemainingAmount(CategoriesContext.listofCategories);
+  },[TaxContext.TAX_AMOUNT]);
+
+
+  useEffect(()=>{
+    p(SOURCE,RemainingContext.totalRemainingAmount,srcColor,"RemainingContext.totalRemainingAmount");
+  },[RemainingContext.totalRemainingAmount])
 
   return (
     <div className={styles.header}>
@@ -74,7 +93,7 @@ export default function Header() {
           {(TaxContext.TAX_AMOUNT) ? (
             <div className={styles.remainingAmountSection}>
               <h2 className="text-bright-full">Remaining: $</h2>
-              <div className="w-12 m-3">{RemainingContext.totalRemainingAmount}</div>
+              <div className="w-12 m-3">{!RemainingContext.totalRemainingAmount?TaxContext.TAX_AMOUNT:RemainingContext.totalRemainingAmount}</div>
             </div>
           ) : ""}
         </div>

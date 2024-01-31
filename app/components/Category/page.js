@@ -20,95 +20,122 @@ export default function Category({ categoryName, categoryData }) {
   const [categoryObj, setCategoryObj] = useState(categoryData);
   const [amountDisplayed, setAmountDisplayed] = useState();
 
-  const dollarClickHandler = (e) => {
-    setCategoryObj((prevCategoryObj) => {
-      const updatedCategoryObj = {
-        ...prevCategoryObj,
-        mode: "dollar",
-        modeCalculatedAmount: prevCategoryObj.amountEntered.amount ,
-        amountEntered: {
-          specified: true,
-          amount: prevCategoryObj.amountEntered.amount || 0
-        },
-      };
-      return updatedCategoryObj;
-    });
+
+
+
+
+  ///////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////
+  const handleModeChange = (newMode, amount) => {
+    let newModeCalculatedAmount;
+  
+    if (newMode === "dollar") {
+      newModeCalculatedAmount = amount;
+    } else if (newMode === "percent") {
+      if (amount > 100) {
+        alert("Please enter a percentage less than 100");
+        newModeCalculatedAmount = 0;
+      } else {
+        newModeCalculatedAmount = TaxContext.TAX_AMOUNT * (amount / 100);
+      }
+    }
+  
+    setCategoryObj((prevCategoryObj) => ({
+      ...prevCategoryObj,
+      mode: newMode,
+      modeCalculatedAmount: newModeCalculatedAmount,
+      amountEntered: {
+        specified: true,
+        amount: amount || 0,
+      },
+    }));
   };
   
-  const percentClickHandler = (e) => {
-    if (categoryObj.amountEntered.amount > 100) {
-      alert("Please enter a percentage less than 100");
-      setCategoryObj((prevCategoryObj) => ({
-        ...prevCategoryObj,
-        amountEntered: {
-          amount: 0
-        }
-      }));
-    } else {
-      setCategoryObj((prevCategoryObj) => {
-        const updatedCategoryObj = {
-          ...prevCategoryObj,
-          modeCalculatedAmount: TaxContext.TAX_AMOUNT * prevCategoryObj.amountEntered.amount/100,
-          mode: "percent",
-          amountEntered: {
-            specified: true,
-            amount: prevCategoryObj.amountEntered.amount || 0
-          },
-        };
-        return updatedCategoryObj;
-      });
+  const dollarClickHandler = () => {
+    handleModeChange("dollar", categoryObj.amountEntered.amount);
+  };
+  
+  const percentClickHandler = () => {
+    handleModeChange("percent", categoryObj.amountEntered.amount);
+  };
+  ///////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////
+
+
+
+
+  
+  const updateCategoryAmount = (newAmount) => {
+    const newModeCalculatedAmount = calculateModeCalculatedAmount(
+      categoryObj.mode,
+      newAmount
+    );
+  
+    setCategoryObj((prevCategoryObj) => ({
+      ...prevCategoryObj,
+      modeCalculatedAmount: newModeCalculatedAmount,
+      amountEntered: {
+        specified: true,
+        amount: newAmount || 0,
+      },
+    }));
+  };
+  
+  const calculateModeCalculatedAmount = (mode, amount) => {
+    if (mode === "dollar") {
+      return amount;
+    } else if (mode === "percent") {
+      return TaxContext.TAX_AMOUNT * (amount / 100);
     }
+  
+    return 0; // Default value
+  };
+  
+  const updateAmountEntered = (e) => {
+    const newAmount = e.target.value;
+    const newModeCalculatedAmount = calculateModeCalculatedAmount(
+      categoryObj.mode,
+      newAmount
+    );
+  
+    setCategoryObj((prevCategoryObj) => ({
+      ...prevCategoryObj,
+      amountEntered: {
+        specified: true,
+        amount: newAmount,
+      },
+      modeCalculatedAmount: newModeCalculatedAmount,
+    }));
   };
 
-  const updateAmountEntered = (e) => {
-    setCategoryObj((prevCategoryObj) => {
-      const updatedAmountEntered = {
-        ...prevCategoryObj,
-        amountEntered: {
-          specified: true,
-          amount: e.target.value,
-        },
-        remainingAmountDisplayed: amountDisplayed
-      };
-      return updatedAmountEntered;
-    });
-    // setAmountDisplayed(()=>{
-    //   if(categoryObj.mode === "percent") {
-    //   return TaxContext.TAX_AMOUNT * prevCategoryObj.amountEntered.amount/100
-    //   }else{
-    //     return e.target.value
-    //   }
-    // })
-  };
-  
   const debouncedUpdateAmountEntered = debounce(updateAmountEntered, 500);
   
   
 
 
 
-  useEffect(()=>{
-    setAmountDisplayed(categoryObj.modeCalculatedAmount);
-  },[categoryObj]);
+
+
+
+
+
+
 
   useEffect(() => {
-    RemainingAmountContext.updateTotalRemainingAmount(
-      SelectedCatsContext.listOfCategories
-    );
+    setAmountDisplayed(categoryObj.modeCalculatedAmount);
+    RemainingAmountContext.updateTotalRemainingAmount(SelectedCatsContext.listOfCategories);
   }, [categoryObj, SelectedCatsContext.listOfCategories]);
 
-  useEffect(() => {
-    p(SOURCE,categoryObj.amountEntered.amount,srcColor,"amount Entered")
-    let singleCategoryCalculation = calculator( TaxContext.TAX_AMOUNT, 1, categoryObj, RemainingAmountContext.totalRemainingAmount );
-  }, [ categoryObj,mode, SelectedCatsContext.listOfCategories, RemainingAmountContext.totalRemainingAmount, ]);
+  
 
   useEffect(() => {
-    p(SOURCE,categoryObj.modeCalculatedAmount,195,"modeCalculatedAmount")
-  }, [mode,categoryObj]);
+    //p(SOURCE, RemainingAmountContext.totalRemainingAmount, srcColor, "RemainingAmountContext.totalRemainingAmount");
+  }, [SelectedCatsContext.listOfCategories]);
 
-  useEffect(() => {
-    p(SOURCE,amountDisplayed,185,"amount displayed")
-  }, [categoryObj.remainingAmountDisplayed,mode]);
+
+
 
 
 

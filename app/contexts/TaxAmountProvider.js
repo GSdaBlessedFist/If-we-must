@@ -1,4 +1,8 @@
-import React, { useEffect,useState, createContext } from "react";
+import React, { useEffect,useState, createContext } from "react"; 
+import p from "@/app/util/consoleHelper";
+
+const SOURCE = "TaxAmountProvider";
+const srcColor = 5;
 
 export const TaxAmountContext = createContext();
 
@@ -8,6 +12,10 @@ export const TaxAmountProvider = ({ children }) => {
   function updateTaxAmount(amount) {
     setTAX_AMOUNT(amount);
   }
+
+  useEffect(()=>{
+    p(SOURCE,TAX_AMOUNT,srcColor,"Tax amount:");
+  },[TAX_AMOUNT]);
 
   const contextValue = { TAX_AMOUNT, updateTaxAmount };
   return (
