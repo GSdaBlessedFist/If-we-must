@@ -3,13 +3,13 @@ import { TaxAmountContext } from "./TaxAmountProvider";
 import p from "@/app/util/consoleHelper";
 
 const SOURCE = "TotalRemainingAmountPROVIDER";
-const srcColor = 185;
+const srcColor = 55;
 
 export const TotalRemainingAmountContext = createContext();
 
 export const TotalRemainingAmountProvider = ({ children }) => {
   const TaxContext = useContext(TaxAmountContext);
-  const [totalRemainingAmount, setTotalRemainingAmount] = useState(0);
+  const [totalRemainingAmount, setTotalRemainingAmount] = useState(TaxContext.TAX_AMOUNT);
 
   function updateTotalRemainingAmount(categories) {
     
@@ -23,9 +23,16 @@ export const TotalRemainingAmountProvider = ({ children }) => {
       setTotalRemainingAmount(TaxContext.TAX_AMOUNT - totalAmount);
     
   }
+
+  useEffect(()=>{
+    setTotalRemainingAmount(TaxContext.TAX_AMOUNT)
+    p(SOURCE,totalRemainingAmount,srcColor,"Total Remaining Amount")
+
+  },[TaxContext.TAX_AMOUNT]);
+
   useEffect(()=>{
 
-    //p(SOURCE,totalRemainingAmount,srcColor,"Total Remaining Amount")
+    p(SOURCE,totalRemainingAmount,srcColor,"Total Remaining Amount")
 
   },[totalRemainingAmount]);
   const contextValue = { totalRemainingAmount, updateTotalRemainingAmount };

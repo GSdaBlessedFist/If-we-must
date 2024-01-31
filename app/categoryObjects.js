@@ -27,7 +27,7 @@ export const categoryObjects = [
     },
   },
   {
-    "Housing": {
+    "Education": {
       mode: "dollar",
       amountEntered: {
         specified: false,

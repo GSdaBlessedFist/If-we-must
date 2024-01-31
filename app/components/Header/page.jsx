@@ -1,42 +1,42 @@
 "use client";
-import { useEffect,useState,useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import styles from "./header.module.scss";
+import debounce from "debounce";
 import { TaxAmountContext } from "../../contexts/TaxAmountProvider";
-import {SelectedCategoriesContext } from "../../contexts/SelectedCategoriesProvider";
+import { SelectedCategoriesContext } from "../../contexts/SelectedCategoriesProvider";
+import { TotalRemainingAmountContext } from "@/app/contexts/TotalRemainingAmountProvider";
 import validate from "./validator";
 
-
-
 export default function Header() {
-  
   const TaxContext = useContext(TaxAmountContext);
-  const [isCategorySelected, setIsCategorySelected] = useState(false);
+  const RemainingContext = useContext(TotalRemainingAmountContext);
   const CategoriesContext = useContext(SelectedCategoriesContext);
+  const [isCategorySelected, setIsCategorySelected] = useState(false);
 
   function handleTaxAmountUpdate(e) {
     const inputValue = e.target.value;
-    
     TaxContext.updateTaxAmount(inputValue);
-    
   }
+
+  //const debouncedUpdateTaxAmount = debounce(handleTaxAmountUpdate, 1500)
 
   function handleCategoryObjectsArrayUpdate(e) {
     const updatedCategoryObjectsArray = CategoriesContext.categoryObjectsArray.map((categoryObj) => {
-      const categoryName = e.target.name;
-  
-      if (categoryObj[categoryName]) {
-        
-        return {
-          [categoryName]: {
-            ...categoryObj[categoryName],
-            selected: e.target.checked,
-          },
-        };
+        const categoryName = e.target.name;
+
+        if (categoryObj[categoryName]) {
+          return {
+            [categoryName]: {
+              ...categoryObj[categoryName],
+              selected: e.target.checked,
+            },
+          };
+        }
+
+        return categoryObj;
       }
-  
-      return categoryObj;
-    });
-    
+    );
+
     if (!CategoriesContext.categoryObjectsArray.some((categoryObj) => categoryObj[e.target.name])) {
       updatedCategoryObjectsArray.push({
         [e.target.name]: {
@@ -45,15 +45,14 @@ export default function Header() {
             specified: false,
             amount: 0,
           },
-          modeCalculatedAmount:0,
+          modeCalculatedAmount: 0,
           remainingAmountDisplayed: 0,
           selected: e.target.checked,
         },
       });
     }
-  
-    CategoriesContext.updateCategoryObjectsArray(updatedCategoryObjectsArray);
 
+    CategoriesContext.updateCategoryObjectsArray(updatedCategoryObjectsArray);
   }
 
   
@@ -61,15 +60,23 @@ export default function Header() {
   return (
     <div className={styles.header}>
       <form className={styles.categoryForm}>
-        <div className={styles.taxAmountLine}>
-          <h3>Taxable Amount: $</h3>
-          <input
-            type="text"
-            className={styles.taxAmount}
-            value={TaxContext.TAX_AMOUNT}
-            onChange={handleTaxAmountUpdate}
-            maxLength="5" 
-          />
+        <div className="flex flex-row justify-around">
+          <div className={styles.taxAmountSection}>
+            <h3>Taxable Amount: $</h3>
+            <input
+              type="text"
+              className={styles.taxAmount}
+              value={TaxContext.TAX_AMOUNT}
+              onChange={handleTaxAmountUpdate}
+              maxLength="5"
+            />
+          </div>
+          {(TaxContext.TAX_AMOUNT) ? (
+            <div className={styles.remainingAmountSection}>
+              <h2 className="text-bright-full">Remaining: $</h2>
+              <div className="w-12 m-3">{RemainingContext.totalRemainingAmount}</div>
+            </div>
+          ) : ""}
         </div>
         <div className={styles.buttonSection}>
           <input
@@ -94,13 +101,13 @@ export default function Header() {
 
           <input
             className={styles.catergoryInput}
-            name="Housing"
+            name="Education"
             type="checkbox"
-            id="housing"
+            id="education"
             onChange={handleCategoryObjectsArrayUpdate}
             disabled={TaxContext.TAX_AMOUNT === ""}
           />
-          <label>Housing</label>
+          <label>Education</label>
 
           <input
             className={styles.catergoryInput}

@@ -6,7 +6,7 @@
   @at-root {
     .categoryForm {
       @at-root {
-        .taxAmountLine {
+        .taxAmountSection {
           @apply flex flex-row justify-center text-2xl;
           //@include b(orange, 5px);
           & h3 {
@@ -15,6 +15,9 @@
           & input {
             @apply w-24 m-3 ml-0 text-xl text-center text-bright-full bg-mid rounded-xl;
           }
+        }
+        .remainingAmountSection{
+          @apply flex flex-row justify-center  items-center text-xl text-bright-fadedHover;
         }
         .buttonSection {
           @apply flex flex-row justify-between p-4 bg-bright-full text-primary-full;

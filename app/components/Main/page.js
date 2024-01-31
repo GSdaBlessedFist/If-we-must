@@ -5,19 +5,12 @@ import Category from "../Category/page";
 import { SelectedCategoriesContext } from "../../contexts/SelectedCategoriesProvider";
 import { TotalRemainingAmountContext } from "../../contexts/TotalRemainingAmountProvider";
 import { categoryObjects } from "../../categoryObjects";
-const p = console.log;
 
 export default function Main() {
-  // const { listOfCategories } = useContext(SelectedCategoriesContext);
+
   const CategoriesContext = useContext(SelectedCategoriesContext);
-  // const { totalRemainingAmount, updateTotalRemainingAmount } = useContext( TotalRemainingAmountContext );
   const AmountContext = useContext( TotalRemainingAmountContext );
   
-
-  
-
-  
-
   return (
     <>
       <div className={styles.main}>

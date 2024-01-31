@@ -5,7 +5,7 @@ import p from "@/app/util/consoleHelper";
 export const SelectedCategoriesContext = createContext();
 
 const SOURCE = "SelectedCategoriesProvider";
-const srcColor = 185;
+const srcColor = 25;
 
 const catObjs = categoryObjects;
 
@@ -40,7 +40,9 @@ export const SelectedCategoriesProvider = ({ children }) => {
       return noDups;
     }
     const noDupsList = removeDuplicates(selectedObjectsList);
-    if (noDupsList.length === 0) return;
+    if (noDupsList.length === 0) {
+      setListOfCategories([])
+    };
     
     p(SOURCE,noDupsList,srcColor,"noDupsList")
     setListOfCategories(selectedObjectsList);
