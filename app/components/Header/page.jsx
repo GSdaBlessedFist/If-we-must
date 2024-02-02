@@ -1,80 +1,36 @@
 "use client";
 import { useEffect, useState, useContext } from "react";
 import styles from "./header.module.scss";
-import debounce from "debounce";
 import { TaxAmountContext } from "../../contexts/TaxAmountProvider";
-import { SelectedCategoriesContext } from "../../contexts/SelectedCategoriesProvider";
+import { CategoryObjectsContext } from "@/app/contexts/CategoryObjectsProvider";
 import { TotalRemainingAmountContext } from "@/app/contexts/TotalRemainingAmountProvider";
 import p from "@/app/util/consoleHelper";
 import validate from "./validator";
 
-
 const SOURCE = "Header Component";
 const srcColor = 185;
-
 
 export default function Header() {
   const TaxContext = useContext(TaxAmountContext);
   const RemainingContext = useContext(TotalRemainingAmountContext);
-  const CategoriesContext = useContext(SelectedCategoriesContext);
-  const [isCategorySelected, setIsCategorySelected] = useState(false);
+  const CatObjectsContext = useContext(CategoryObjectsContext);
 
-  function handleTaxAmountUpdate(e) {
+  function updateTaxAmount(e) {
     const inputValue = e.target.value;
     TaxContext.updateTaxAmount(inputValue);
-    
+  }
+  
+  function updateCategorySelectStatus(e) {
+    const categoryName = e.target.name;
+    const selected = e.target.checked;
+
+    CatObjectsContext.updateSelectedStatus(categoryName, selected);
   }
 
-  //const debouncedUpdateTaxAmount = debounce(handleTaxAmountUpdate, 1500)
-
-  function handleCategoryObjectsArrayUpdate(e) {
-    const updatedCategoryObjectsArray = CategoriesContext.categoryObjectsArray.map((categoryObj) => {
-        const categoryName = e.target.name;
-
-        if (categoryObj[categoryName]) {
-          return {
-            [categoryName]: {
-              ...categoryObj[categoryName],
-              selected: e.target.checked,
-            },
-          };
-        }
-
-        return categoryObj;
-      }
-    );
-
-    if (!CategoriesContext.categoryObjectsArray.some((categoryObj) => categoryObj[e.target.name])) {
-      updatedCategoryObjectsArray.push({
-        [e.target.name]: {
-          mode: "dollar",
-          amountEntered: {
-            specified: false,
-            amount: 0,
-          },
-          modeCalculatedAmount: 0,
-          selected: e.target.checked,
-        },
-      });
-    }
-
-    CategoriesContext.updateCategoryObjectsArray(updatedCategoryObjectsArray);
-  }
-  //GOOD//
+  
   useEffect(() => {
-    //p(SOURCE,TaxContext.TAX_AMOUNT,srcColor,"TaxContext.TAX_AMOUNT")
-  },[TaxContext.TAX_AMOUNT]);
-
-  //GOOD
-  useEffect(() => {
-    //p(SOURCE,CategoriesContext.listofCategories,srcColor,"CategoriesContext.listofCategories");
-    //RemainingContext.updateTotalRemainingAmount(CategoriesContext.listofCategories);
-  },[TaxContext.TAX_AMOUNT]);
-
-
-  useEffect(()=>{
-    p(SOURCE,RemainingContext.totalRemainingAmount,srcColor,"RemainingContext.totalRemainingAmount");
-  },[RemainingContext.totalRemainingAmount])
+    p( SOURCE, CatObjectsContext.catObjects, srcColor, "initial category objects state:" );
+  }, []);
 
   return (
     <div className={styles.header}>
@@ -86,16 +42,19 @@ export default function Header() {
               type="text"
               className={styles.taxAmount}
               value={TaxContext.TAX_AMOUNT}
-              onChange={handleTaxAmountUpdate}
+              onChange={updateTaxAmount}
               maxLength="5"
             />
           </div>
-          {(TaxContext.TAX_AMOUNT) ? (
+          {TaxContext.TAX_AMOUNT ? (
             <div className={styles.remainingAmountSection}>
               <h2 className="text-bright-full">Remaining: $</h2>
-              <div className="w-12 m-3">{!RemainingContext.totalRemainingAmount?TaxContext.TAX_AMOUNT:RemainingContext.totalRemainingAmount}</div>
+              {/* <div className="w-12 m-3">{!RemainingContext.totalRemainingAmount?TaxContext.TAX_AMOUNT:RemainingContext.totalRemainingAmount}</div> */}
+              <div className="w-12 m-3"></div>
             </div>
-          ) : ""}
+          ) : (
+            ""
+          )}
         </div>
         <div className={styles.buttonSection}>
           <input
@@ -103,7 +62,7 @@ export default function Header() {
             name="Space Exploration"
             type="checkbox"
             id="spaceEx"
-            onChange={handleCategoryObjectsArrayUpdate}
+            onChange={updateCategorySelectStatus}
             disabled={TaxContext.TAX_AMOUNT === ""}
           />
           <label>Space Exploration</label>
@@ -113,7 +72,7 @@ export default function Header() {
             name="Military"
             type="checkbox"
             id="military"
-            onChange={handleCategoryObjectsArrayUpdate}
+            onChange={updateCategorySelectStatus}
             disabled={TaxContext.TAX_AMOUNT === ""}
           />
           <label>Military</label>
@@ -123,7 +82,7 @@ export default function Header() {
             name="Education"
             type="checkbox"
             id="education"
-            onChange={handleCategoryObjectsArrayUpdate}
+            onChange={updateCategorySelectStatus}
             disabled={TaxContext.TAX_AMOUNT === ""}
           />
           <label>Education</label>
@@ -133,7 +92,7 @@ export default function Header() {
             name="Medicine"
             type="checkbox"
             id="medicine"
-            onChange={handleCategoryObjectsArrayUpdate}
+            onChange={updateCategorySelectStatus}
             disabled={TaxContext.TAX_AMOUNT === ""}
           />
           <label>Medicine</label>
@@ -143,7 +102,7 @@ export default function Header() {
             name="Infrastructure"
             type="checkbox"
             id="infrastructure"
-            onChange={handleCategoryObjectsArrayUpdate}
+            onChange={updateCategorySelectStatus}
             disabled={TaxContext.TAX_AMOUNT === ""}
           />
           <label>Infrastructure</label>

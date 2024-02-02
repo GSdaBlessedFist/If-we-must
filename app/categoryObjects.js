@@ -3,7 +3,7 @@
 
 export const categoryObjects = [
   {
-    "Space exploration": {
+    "Space Exploration": {
       mode: "dollar",
       amountEntered: {
         specified: false,
