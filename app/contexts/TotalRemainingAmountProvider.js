@@ -7,6 +7,7 @@ const SOURCE = "TotalRemainingAmountPROVIDER";
 const srcColor = 55;
 
 export const TotalRemainingAmountContext = createContext();
+TotalRemainingAmountContext.displayName = "TotalRemainingAmountContext";
 
 export const TotalRemainingAmountProvider = ({ children }) => {
 

@@ -5,6 +5,7 @@ const SOURCE = "TaxAmountProvider";
 const srcColor = 5;
 
 export const TaxAmountContext = createContext();
+TaxAmountContext.displayName = "TaxAmountContext";
 
 export const TaxAmountProvider = ({ children }) => {
   const [TAX_AMOUNT, setTAX_AMOUNT] = useState("");

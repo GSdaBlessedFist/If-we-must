@@ -3,6 +3,7 @@ import { categoryObjects } from "../categoryObjects";
 import p from "@/app/util/consoleHelper";
 
 export const SelectedCategoriesContext = createContext();
+SelectedCategoriesContext.displayName = "SelectedCategoriesContext";
 
 const SOURCE = "SelectedCategoriesProvider";
 const srcColor = 25;
