@@ -3,7 +3,7 @@ import React, { useState, useContext, useEffect } from "react";
 import debounce from "debounce";
 import p from "@/app/util/consoleHelper";
 import styles from "./category.module.scss";
-import { SelectedCategoriesContext } from "../../contexts/SelectedCategoriesProvider";
+import { CategoryObjectsContext } from "@/app/contexts/CategoryObjectsProvider";
 import { TaxAmountContext } from "../../contexts/TaxAmountProvider";
 import { TotalRemainingAmountContext } from "../../contexts/TotalRemainingAmountProvider";
 import calculator from "../../util/calculations";
@@ -15,7 +15,7 @@ export default function Category({ categoryName, categoryData }) {
 
   const TaxContext = useContext(TaxAmountContext);
   const RemainingAmountContext = useContext(TotalRemainingAmountContext);
-  const SelectedCatsContext = useContext(SelectedCategoriesContext);
+  const CatObjectsContext = useContext(CategoryObjectsContext);
   const [mode, setMode] = useState("dollar");
   const [categoryObj, setCategoryObj] = useState(categoryData);
   const [amountDisplayed, setAmountDisplayed] = useState();
@@ -27,6 +27,20 @@ export default function Category({ categoryName, categoryData }) {
   ///////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////
+  
+  const updateCategoryMode = (e, categoryName) => {
+    const newMode = e.target.dataset.mode;
+  
+    if (newMode) {
+      console.log('Clicked:', categoryName, 'Mode:', newMode);
+      CatObjectsContext.updateMode(categoryName, newMode);
+    } else {
+      console.error('Mode is undefined or null!');
+    }
+  };
+
+
+
   const handleModeChange = (newMode, amount) => {
     let newModeCalculatedAmount;
   
@@ -50,14 +64,6 @@ export default function Category({ categoryName, categoryData }) {
         amount: amount || 0,
       },
     }));
-  };
-  
-  const dollarClickHandler = () => {
-    handleModeChange("dollar", categoryObj.amountEntered.amount);
-  };
-  
-  const percentClickHandler = () => {
-    handleModeChange("percent", categoryObj.amountEntered.amount);
   };
   ///////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////
@@ -123,26 +129,6 @@ export default function Category({ categoryName, categoryData }) {
 
 
 
-  useEffect(() => {
-    setAmountDisplayed(categoryObj.modeCalculatedAmount);
-    RemainingAmountContext.updateTotalRemainingAmount(SelectedCatsContext.listOfCategories);
-  }, [categoryObj, SelectedCatsContext.listOfCategories]);
-
-  
-
-  useEffect(() => {
-    //p(SOURCE, RemainingAmountContext.totalRemainingAmount, srcColor, "RemainingAmountContext.totalRemainingAmount");
-  }, [SelectedCatsContext.listOfCategories]);
-
-
-
-
-
-
-
-
-
-
   return (
     <>
       <div className={styles.categoryContainer} key="">
@@ -150,35 +136,13 @@ export default function Category({ categoryName, categoryData }) {
           <div>{categoryName}</div>
         </div>
         <div className={styles.middle}>
-          <a
-            href="#"
-            className={
-              categoryObj.mode === "dollar"
-                ? `${styles.dollar} ${styles.modeSelected}`
-                : `${styles.dollar}`
-            }
-            onClick={dollarClickHandler}
-          >
+          <button className={ categoryObj.mode === "dollar" ? `${styles.dollar} ${styles.modeSelected}` : `${styles.dollar}` } data-mode="dollar" onClick={(e) => updateCategoryMode(e, categoryName)} >
             <div>$</div>
-          </a>
-          <input
-            className={styles.input}
-            placeholder="amount"
-            alt=""
-            maxLength="6"
-            onChange={debouncedUpdateAmountEntered}
-          />
-          <a
-            href="#"
-            className={
-              categoryObj.mode === "percent"
-                ? `${styles.percent} ${styles.modeSelected}`
-                : `${styles.percent}`
-            }
-            onClick={percentClickHandler}
-          >
+          </button>
+          <input className={styles.input} placeholder="amount" alt="" maxLength="6" onChange={debouncedUpdateAmountEntered} />
+          <button className={ categoryObj.mode === "percent" ? `${styles.percent} ${styles.modeSelected}` : `${styles.percent}` } data-mode="percent" onClick={(e) => updateCategoryMode(e, categoryName)} >
             <div>%</div>
-          </a>
+          </button>
         </div>
         <div className={styles.amount}>
         {!amountDisplayed? "":amountDisplayed}

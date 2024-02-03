@@ -28,9 +28,6 @@ export default function Header() {
   }
 
   
-  useEffect(() => {
-    p( SOURCE, CatObjectsContext.catObjects, srcColor, "initial category objects state:" );
-  }, []);
 
   return (
     <div className={styles.header}>
