@@ -9,7 +9,7 @@ export const categoryObjects = [
         specified: false,
         amount: 0
       },
-      modeCalculatedAmount:0,
+      amountDisplayed:0,
       selected: false,
     },
   },
@@ -20,7 +20,7 @@ export const categoryObjects = [
         specified: false,
         amount: 0
       },
-      modeCalculatedAmount:0,
+      amountDisplayed:0,
       selected: false,
     },
   },
@@ -31,7 +31,7 @@ export const categoryObjects = [
         specified: false,
         amount: 0
       },
-      modeCalculatedAmount:0,
+      amountDisplayed:0,
       selected: false,
     },
   },
@@ -42,7 +42,7 @@ export const categoryObjects = [
         specified: false,
         amount: 0
       },
-      modeCalculatedAmount:0,
+      amountDisplayed:0,
       selected: false,
     },
   },
@@ -53,7 +53,7 @@ export const categoryObjects = [
         specified: false,
         amount: 0
       },
-      modeCalculatedAmount:0,
+      amountDisplayed:0,
       selected: false,
     },
   },

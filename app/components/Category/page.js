@@ -22,88 +22,90 @@ export default function Category({ categoryName, categoryData }) {
   const [amountDisplayed, setAmountDisplayed] = useState();
 
 
-
-
-
   ///////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////////////
+  ////////////////////////GOOD///////////////////////////////////
 
   const updateCategoryMode = (e, categoryName) => {
     const newMode = (e.target.innerHTML === "$") ? "dollar" : "percent";
     CatObjectsContext.updateMode(categoryName, newMode)
     setMode(newMode)
   };
-  useEffect(() => {
 
-    p(SOURCE, mode, srcColor, "mode:")
-  }, [mode])
-
-  ///////////////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////////////
 
   const updateCategoryAmount = (e, categoryName) => {
     const newAmount = e.target.value;
     const updatedAmount = (() => {
       switch (newAmount) {
         case "":
-          return {specified: false, amount: 0};
+          return { specified: false, amount: 0 };
           break;
         case 0:
-          return {specified: false, amount: 0};
+          return { specified: false, amount: 0 };
           break;
         default:
           if (!isNaN(newAmount)) {
-              return { specified: true, amount: Number(newAmount) };
+            return { specified: true, amount: Number(newAmount) };
           }
           break;
       }
     })();
     setAmountEntered(updatedAmount)
-    
-    CatObjectsContext.updateAmountEntered(categoryName,amountEntered)
-  }
 
+    CatObjectsContext.updateAmountEntered(categoryName, amountEntered)
+
+  }
   const debouncedUpdateAmountEntered = debounce(updateCategoryAmount, 500);
 
-  useEffect(() => {
-    p(SOURCE, amountEntered, srcColor, "updated amount entered")
-  }, [amountEntered])
+  ////////////////////////GOOD/////////////////////////////////////
   ///////////////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////////////
+  /////////////////////////IN PROGRESS/////////////////////////////////////
 
-
-
-
-
-
-
-  const handleModeChange = (newMode, amount) => {
+  const calculatedAmountDisplayed = (categoryName, newMode, amountEntered) => {
     let newModeCalculatedAmount;
 
     if (newMode === "dollar") {
-      newModeCalculatedAmount = amount;
+      if (amountEntered.specified === false || amountEntered.amount === "") {
+        newModeCalculatedAmount = TaxContext.TAX_AMOUNT;
+      } else {
+        newModeCalculatedAmount = (amountEntered.amount < TaxContext.TAX_AMOUNT) ? amountEntered.amount : TaxContext.TAX_AMOUNT
+      }
     } else if (newMode === "percent") {
-      if (amount > 100) {
+    
+      if (amountEntered?.amount > 100) {
         alert("Please enter a percentage less than 100");
         newModeCalculatedAmount = 0;
+      } else if (amountEntered.specified === false || amountEntered.amount === "" || amountEntered.amount === 0) {
+        newModeCalculatedAmount = TaxContext.TAX_AMOUNT;
       } else {
-        newModeCalculatedAmount = TaxContext.TAX_AMOUNT * (amount / 100);
+        newModeCalculatedAmount = (TaxContext.TAX_AMOUNT * (amountEntered.amount / 100)).toFixed(2);
       }
     }
-
-    setCategoryObj((prevCategoryObj) => ({
-      ...prevCategoryObj,
-      mode: newMode,
-      modeCalculatedAmount: newModeCalculatedAmount,
-      amountEntered: {
-        specified: true,
-        amount: amount || 0,
-      },
-    }));
+    setAmountDisplayed(newModeCalculatedAmount);
+    return CatObjectsContext.updateAmountDisplayed(categoryName, newModeCalculatedAmount)
   };
+
+
+  ///////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////
+
+  useEffect(()=>{
+    calculatedAmountDisplayed(categoryName,mode, amountEntered)
+  },[TaxContext.TAX_AMOUNT,amountEntered,mode]);
+
+  useEffect(() => {
+    p(SOURCE,amountEntered,srcColor -45, "amount:")
+  }, [mode, amountEntered])
+
+  useEffect(() => {
+    p(SOURCE, amountDisplayed, srcColor, "amount displayed")
+  }, [mode, amountDisplayed])
+
+
+
+
+
 
 
 
@@ -135,11 +137,11 @@ export default function Category({ categoryName, categoryData }) {
           <div>{categoryName}</div>
         </div>
         <div className={styles.middle}>
-          <button className={categoryObj.mode === "dollar" ? `${styles.dollar} ${styles.modeSelected}` : `${styles.dollar}`} data-mode="dollar" onClick={(e) => updateCategoryMode(e, categoryName)} >
+          <button className={mode === "dollar" ? `${styles.dollar} ${styles.modeSelected}` : `${styles.dollar}`} onClick={(e) => updateCategoryMode(e, categoryName)} >
             <div>$</div>
           </button>
           <input className={styles.input} placeholder="amount" alt="" maxLength="6" onChange={updateCategoryAmount} />
-          <button className={categoryObj.mode === "percent" ? `${styles.percent} ${styles.modeSelected}` : `${styles.percent}`} data-mode="percent" onClick={(e) => updateCategoryMode(e, categoryName)} >
+          <button className={mode === "percent" ? `${styles.percent} ${styles.modeSelected}` : `${styles.percent}`} onClick={(e) => updateCategoryMode(e, categoryName)} >
             <div>%</div>
           </button>
         </div>

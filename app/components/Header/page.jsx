@@ -19,7 +19,7 @@ export default function Header() {
     const inputValue = e.target.value;
     TaxContext.updateTaxAmount(inputValue);
   }
-  
+    
   function updateCategorySelectStatus(e) {
     const categoryName = e.target.name;
     const selected = e.target.checked;

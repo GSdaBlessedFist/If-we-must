@@ -43,6 +43,12 @@ const reducer = (state, action) => {
                 const { categoryName, amountEntered } = action.payload;
                 return updateCategoryProperty(state, categoryName, 'amountEntered', {specified:false,amount:amountEntered});
             }
+
+        case "UPDATE MODE CALCULATED AMOUNT":
+            {
+                const {categoryName,amountDisplayed} = action.payload;
+                return updateCategoryProperty(state, categoryName, 'amountDisplayed',amountDisplayed)
+            }
         default:
             return state;
     }
@@ -61,17 +67,23 @@ export const CategoryObjectsProvider = ({ children }) => {
     const updateAmountEntered = (categoryName,amountEntered)=>{
         dispatch({type:"UPDATE AMOUNT ENTERED",payload:{categoryName,amountEntered}})
     }
-
+    const updateAmountDisplayed = (categoryName,amountDisplayed)=>{
+        dispatch({ type:"UPDATE MODE CALCULATED AMOUNT", payload: { categoryName, amountDisplayed}});
+    }
 
 
 
 
     
     useEffect(() => {
-        p(SOURCE, catObjects, srcColor, "catObjects updated")
+        // p(SOURCE, catObjects, srcColor, "catObjects updated")
+        // catObjects.forEach(catObject =>{
+        //     let amount = Object.values(catObject)
+        //     p(SOURCE,amount,srcColor +25, "amounts displayed:")
+        // })
     }, [catObjects]);
 
-    const contextValue = { catObjects, updateSelectedStatus ,updateMode,updateAmountEntered};
+    const contextValue = { catObjects, updateSelectedStatus ,updateMode,updateAmountEntered,updateAmountDisplayed};
 
 
 
