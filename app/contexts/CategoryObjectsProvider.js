@@ -38,6 +38,11 @@ const reducer = (state, action) => {
                 return updateCategoryProperty(state, categoryName, 'mode', mode);
             }
 
+        case "UPDATE AMOUNT ENTERED":
+            {
+                const { categoryName, amountEntered } = action.payload;
+                return updateCategoryProperty(state, categoryName, 'amountEntered', {specified:false,amount:amountEntered});
+            }
         default:
             return state;
     }
@@ -53,7 +58,9 @@ export const CategoryObjectsProvider = ({ children }) => {
     const updateMode = (categoryName, mode) => {
         dispatch({ type: "UPDATE MODE", payload: { categoryName, mode } })
     }
-
+    const updateAmountEntered = (categoryName,amountEntered)=>{
+        dispatch({type:"UPDATE AMOUNT ENTERED",payload:{categoryName,amountEntered}})
+    }
 
 
 
@@ -64,7 +71,7 @@ export const CategoryObjectsProvider = ({ children }) => {
         p(SOURCE, catObjects, srcColor, "catObjects updated")
     }, [catObjects]);
 
-    const contextValue = { catObjects, updateSelectedStatus ,updateMode};
+    const contextValue = { catObjects, updateSelectedStatus ,updateMode,updateAmountEntered};
 
 
 
