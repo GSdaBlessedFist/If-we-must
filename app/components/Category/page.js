@@ -29,16 +29,18 @@ export default function Category({ categoryName, categoryData }) {
   ///////////////////////////////////////////////////////////////////
   
   const updateCategoryMode = (e, categoryName) => {
-    const newMode = e.target.dataset.mode;
-  
-    if (newMode) {
-      console.log('Clicked:', categoryName, 'Mode:', newMode);
-      CatObjectsContext.updateMode(categoryName, newMode);
-    } else {
-      console.error('Mode is undefined or null!');
-    }
+    const newMode = (e.target.innerHTML === "$")?"dollar":"percent";
+    CatObjectsContext.updateMode(categoryName,newMode)
+    setMode(newMode)
   };
+  useEffect(()=>{
+    
+    p(SOURCE,mode,srcColor,"mode:")
+  },[mode])
 
+  ///////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////
 
 
   const handleModeChange = (newMode, amount) => {
