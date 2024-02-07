@@ -11,17 +11,17 @@ import { CategoryObjectsProvider } from "@/app/contexts/CategoryObjectsProvider"
 export default function PrimeContainer() {
   return (<>
     <TaxAmountProvider>
-     
+    <TotalRemainingAmountProvider>
       <CategoryObjectsProvider>
-        {/* <TotalRemainingAmountProvider> */}
+        
           <div className={styles.primeContainer}>
             <Header />
             <Main />
             {/* <Footer /> */}
           </div>
-        {/* </TotalRemainingAmountProvider> */}
+        
         </CategoryObjectsProvider>
-      
+        </TotalRemainingAmountProvider>
     </TaxAmountProvider>
   </>);
 }

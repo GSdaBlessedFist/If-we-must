@@ -31,6 +31,9 @@ export default function Category({ categoryName, categoryData }) {
     CatObjectsContext.updateMode(categoryName, newMode)
     setMode(newMode)
   };
+///////////////////////////////////////////////////////////////////
+  /////////////////////////IN PROGRESS/////////////////////////////////////
+
 
 
   const updateCategoryAmount = (e, categoryName) => {
@@ -38,9 +41,7 @@ export default function Category({ categoryName, categoryData }) {
     const updatedAmount = (() => {
       switch (newAmount) {
         case "":
-          return { specified: false, amount: 0 };
-          break;
-        case 0:
+        case "0":
           return { specified: false, amount: 0 };
           break;
         default:
@@ -51,15 +52,17 @@ export default function Category({ categoryName, categoryData }) {
       }
     })();
     setAmountEntered(updatedAmount)
-
-    CatObjectsContext.updateAmountEntered(categoryName, amountEntered)
+    //calculatedAmountDisplayed(categoryName, mode, amountEntered)
+    //CatObjectsContext.updateAmountEntered(categoryName, updatedAmount);
+    //RemainingAmountContext.updateTotalRemainingAmount(amountDisplayed);
 
   }
-  const debouncedUpdateAmountEntered = debounce(updateCategoryAmount, 500);
-
-  ////////////////////////GOOD/////////////////////////////////////
+  
   ///////////////////////////////////////////////////////////////////
   /////////////////////////IN PROGRESS/////////////////////////////////////
+
+
+
 
   const calculatedAmountDisplayed = (categoryName, newMode, amountEntered) => {
     let newModeCalculatedAmount;
@@ -68,6 +71,9 @@ export default function Category({ categoryName, categoryData }) {
       if (amountEntered.specified === false || amountEntered.amount === "") {
         newModeCalculatedAmount = TaxContext.TAX_AMOUNT;
       } else {
+        if(amountEntered.specified === true && amountEntered.amount > TaxContext.TAX_AMOUNT){
+          alert("Amount entered is greater than the amount owned")
+        } 
         newModeCalculatedAmount = (amountEntered.amount < TaxContext.TAX_AMOUNT) ? amountEntered.amount : TaxContext.TAX_AMOUNT
       }
     } else if (newMode === "percent") {
@@ -82,50 +88,32 @@ export default function Category({ categoryName, categoryData }) {
       }
     }
     setAmountDisplayed(newModeCalculatedAmount);
-    return CatObjectsContext.updateAmountDisplayed(categoryName, newModeCalculatedAmount)
+    return CatObjectsContext.updateAmountDisplayed(categoryName, newModeCalculatedAmount);
+    
   };
-
-
+////////////////////////GOOD/////////////////////////////////////
   ///////////////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////////////
+  /////////////////////////IN PROGRESS/////////////////////////////////////
 
-  useEffect(()=>{
-    calculatedAmountDisplayed(categoryName,mode, amountEntered)
-  },[TaxContext.TAX_AMOUNT,amountEntered,mode]);
 
   useEffect(() => {
-    p(SOURCE,amountEntered,srcColor -45, "amount:")
-  }, [mode, amountEntered])
-
+    calculatedAmountDisplayed(categoryName, mode, amountEntered);
+  }, [amountEntered, categoryName, mode]);
+  
   useEffect(() => {
-    p(SOURCE, amountDisplayed, srcColor, "amount displayed")
-  }, [mode, amountDisplayed])
+    RemainingAmountContext.updateTotalRemainingAmount(amountDisplayed);
+  }, [amountDisplayed]);
+  
+  useEffect(() => {
+    p(SOURCE,RemainingAmountContext.totalRemainingAmount,srcColor + 5,"RemainingAmountContext.totalRemainingAmount")
+  },[RemainingAmountContext.totalRemainingAmount]);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  
+  ///////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////
 
 
 

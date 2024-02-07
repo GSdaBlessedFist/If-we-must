@@ -71,17 +71,7 @@ export const CategoryObjectsProvider = ({ children }) => {
         dispatch({ type:"UPDATE MODE CALCULATED AMOUNT", payload: { categoryName, amountDisplayed}});
     }
 
-
-
-
     
-    useEffect(() => {
-        // p(SOURCE, catObjects, srcColor, "catObjects updated")
-        // catObjects.forEach(catObject =>{
-        //     let amount = Object.values(catObject)
-        //     p(SOURCE,amount,srcColor +25, "amounts displayed:")
-        // })
-    }, [catObjects]);
 
     const contextValue = { catObjects, updateSelectedStatus ,updateMode,updateAmountEntered,updateAmountDisplayed};
 

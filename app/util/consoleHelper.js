@@ -7,14 +7,14 @@ const p = function (sourceName,data, hue=25, variableName="") {
         console.log(
           `%c${sourceName}: %c${variableName}: %o`,
           `font-weight:bold;color:${color};`,
-          `font-weight:normal;color:${dimmedColor};font-style: oblique;`,
+          `font-weight:normal;color:${dimmedColor};`,
           data
         );
       } else {
         console.log(
           `%c${sourceName}: %c${variableName}: %o`,
           `font-weight:bold;color:${color};`,
-          `font-weight:normal;color:${dimmedColor};font-style: oblique;`,
+          `font-weight:normal;color:${dimmedColor};`,
           data
         );
       }
@@ -22,7 +22,7 @@ const p = function (sourceName,data, hue=25, variableName="") {
       console.log(
         `%c${sourceName}: %c${variableName}: %s`,
         `font-weight:bold;color:${color};`,
-        `font-weight:normal;color:${color};font-style: oblique;`,
+        `font-weight:normal;color:${color};`,
         data
       );
     }

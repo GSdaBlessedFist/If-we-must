@@ -18,6 +18,7 @@ export default function Header() {
   function updateTaxAmount(e) {
     const inputValue = e.target.value;
     TaxContext.updateTaxAmount(inputValue);
+    
   }
     
   function updateCategorySelectStatus(e) {
@@ -27,7 +28,9 @@ export default function Header() {
     CatObjectsContext.updateSelectedStatus(categoryName, selected);
   }
 
-  
+  useEffect(() => {
+    localStorage.setItem("tax_amount", TaxContext.TAX_AMOUNT);
+  },[TaxContext.TAX_AMOUNT]);
 
   return (
     <div className={styles.header}>
@@ -46,7 +49,7 @@ export default function Header() {
           {TaxContext.TAX_AMOUNT ? (
             <div className={styles.remainingAmountSection}>
               <h2 className="text-bright-full">Remaining: $</h2>
-              {/* <div className="w-12 m-3">{!RemainingContext.totalRemainingAmount?TaxContext.TAX_AMOUNT:RemainingContext.totalRemainingAmount}</div> */}
+              <div className="w-12 m-3">{RemainingContext.totalRemainingAmount?RemainingContext.totalRemainingAmount:TaxContext.TAX_AMOUNT}</div>
               <div className="w-12 m-3"></div>
             </div>
           ) : (
@@ -60,7 +63,7 @@ export default function Header() {
             type="checkbox"
             id="spaceEx"
             onChange={updateCategorySelectStatus}
-            disabled={TaxContext.TAX_AMOUNT === ""}
+            disabled={TaxContext.TAX_AMOUNT === "" | TaxContext.TAX_AMOUNT === 0}
           />
           <label>Space Exploration</label>
 
@@ -70,7 +73,7 @@ export default function Header() {
             type="checkbox"
             id="military"
             onChange={updateCategorySelectStatus}
-            disabled={TaxContext.TAX_AMOUNT === ""}
+            disabled={TaxContext.TAX_AMOUNT === "" | TaxContext.TAX_AMOUNT === 0}
           />
           <label>Military</label>
 
@@ -80,7 +83,7 @@ export default function Header() {
             type="checkbox"
             id="education"
             onChange={updateCategorySelectStatus}
-            disabled={TaxContext.TAX_AMOUNT === ""}
+            disabled={TaxContext.TAX_AMOUNT === "" | TaxContext.TAX_AMOUNT === 0}
           />
           <label>Education</label>
 
@@ -90,7 +93,7 @@ export default function Header() {
             type="checkbox"
             id="medicine"
             onChange={updateCategorySelectStatus}
-            disabled={TaxContext.TAX_AMOUNT === ""}
+            disabled={TaxContext.TAX_AMOUNT === "" | TaxContext.TAX_AMOUNT === 0}
           />
           <label>Medicine</label>
 
@@ -100,7 +103,7 @@ export default function Header() {
             type="checkbox"
             id="infrastructure"
             onChange={updateCategorySelectStatus}
-            disabled={TaxContext.TAX_AMOUNT === ""}
+            disabled={TaxContext.TAX_AMOUNT === "" | TaxContext.TAX_AMOUNT === 0}
           />
           <label>Infrastructure</label>
         </div>

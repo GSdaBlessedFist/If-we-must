@@ -8,10 +8,10 @@ export const TaxAmountContext = createContext();
 TaxAmountContext.displayName = "TaxAmountContext";
 
 export const TaxAmountProvider = ({ children }) => {
-  const [TAX_AMOUNT, setTAX_AMOUNT] = useState("");
+  const [TAX_AMOUNT, setTAX_AMOUNT] = useState(0);
 
   function updateTaxAmount(amount) {
-    setTAX_AMOUNT(amount);
+    setTAX_AMOUNT(amount.trim().replace(/^0+/,""));
   }
 
   useEffect(()=>{
