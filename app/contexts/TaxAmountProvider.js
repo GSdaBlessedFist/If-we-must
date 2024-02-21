@@ -1,13 +1,13 @@
-import React, { useEffect,useState, createContext } from "react"; 
+import React, { useEffect,useState, createContext, useContext } from "react"; 
 import p from "@/app/util/consoleHelper";
 
 const SOURCE = "TaxAmountProvider";
 const srcColor = 5;
 
-export const TaxAmountContext = createContext();
+const TaxAmountContext = createContext();
 TaxAmountContext.displayName = "TaxAmountContext";
 
-export const TaxAmountProvider = ({ children }) => {
+const TaxAmountProvider = ({ children }) => {
   const [TAX_AMOUNT, setTAX_AMOUNT] = useState(0);
 
   function updateTaxAmount(amount) {
@@ -15,13 +15,17 @@ export const TaxAmountProvider = ({ children }) => {
   }
 
   useEffect(()=>{
-    p(SOURCE,TAX_AMOUNT,srcColor,"Tax amount:");
+    //p(SOURCE,TAX_AMOUNT,srcColor,"Tax amount:");
   },[TAX_AMOUNT]);
 
   const contextValue = { TAX_AMOUNT, updateTaxAmount };
   return (
-    <TaxAmountContext.Provider value={{ TAX_AMOUNT, updateTaxAmount }}>
+    <TaxAmountContext.Provider value={contextValue}>
       {children}
     </TaxAmountContext.Provider>
   );
 };
+
+const useTaxAmountContext = ()=> useContext(TaxAmountContext);
+
+export {TaxAmountProvider,useTaxAmountContext}

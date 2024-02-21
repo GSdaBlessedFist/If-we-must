@@ -40,7 +40,7 @@
             }
         }
         .amount {
-            @apply flex justify-center items-center;
+            @apply w-full flex justify-center items-center;
             @at-root{
                 .amountHeader {
                     @apply text-bright-full;
