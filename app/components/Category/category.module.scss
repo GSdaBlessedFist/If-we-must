@@ -1,52 +1,53 @@
 @import "../../styles/mixins.scss";
 
 .categoryContainer {
-    width: clamp(100px, 125px, 125px);
-    height: 200px;
-    @apply grid bg-primary-full rounded-xl mx-4;
-    grid-template-rows:  50px 100px 50px;
-    grid-template-areas: "title"
-                         "input"
-                         "calculated";
-    @at-root {
-        .title {
-            grid-area: title;
-            @apply flex justify-center items-center text-center text-bright-full leading-5 font-semibold;
-        }
-        .middle {
-            @apply grid h-full bg-dark;
-            grid-template-columns: 1fr 50% 1fr;
-            grid-template-areas: "dollar amount percent";
-            @at-root {
-                .dollar {
-                    grid-area: dollar;
-                    @apply flex justify-center items-center text-3xl bg-gradient-to-r from-primary-faded to-transparent hover:bg-primary-fadedHover text-bright-full overflow-hidden active:bg-primary-fadedHover;    
-                }
-                .modeSelected{
-                    @apply bg-primary-faded border-2 border-primary-full;
-                }
-                .input {
-                    grid-area: amount;
-                    @apply inline w-full my-8 mx-0 text-center text-2xl text-bright-full bg-mid ;
-                }
-                .input::placeholder{
-                    @apply text-sm;
-                }
-                .percent {
-                    grid-area: percent;
-                    @apply flex justify-center items-center text-3xl bg-gradient-to-l from-primary-faded to-transparent hover:bg-primary-fadedHover text-bright-full overflow-hidden;
-                    
-                }
-            }
-        }
-        .amount {
-            @apply w-full flex justify-center items-center;
-            @at-root{
-                .amountHeader {
-                    @apply text-bright-full;
-                }
-            }
-        }
+  width: clamp(100px, 125px, 125px);
+  @apply grid bg-primary-full rounded-xl mx-4;
+  grid-template-rows: 50px 100px 70px;
+  grid-template-areas:
+    "title"
+    "input"
+    "calculated";
+  @at-root {
+    .title {
+      grid-area: title;
+      @apply flex justify-center items-center text-center text-bright-full leading-5 font-semibold border-b-4 border-bright-faded;
     }
-    //@include b(green,5px);
+    .middle {
+      @apply grid h-full bg-dark;
+      grid-template-columns: 1fr 50% 1fr;
+      grid-template-areas: "dollar amount percent";
+      @at-root {
+        .dollar {
+          grid-area: dollar;
+          @apply flex justify-center items-center text-3xl bg-gradient-to-r from-primary-faded to-transparent hover:bg-primary-fadedHover text-bright-full overflow-hidden active:bg-primary-fadedHover;
+        }
+        .modeSelected {
+          @apply bg-primary-faded border-2 border-primary-full;
+        }
+        .input {
+          grid-area: amount;
+          @apply inline w-full my-8 mx-0 text-center text-2xl text-bright-full bg-mid;
+        }
+        .input::placeholder {
+          @apply text-sm;
+        }
+        .percent {
+          grid-area: percent;
+          @apply flex justify-center items-center text-3xl bg-gradient-to-l from-primary-faded to-transparent hover:bg-primary-fadedHover text-bright-full overflow-hidden;
+        }
+      }
+    }
+    .amountSection {
+      @apply w-full flex flex-col justify-start items-center border-t-4 p-1;
+      @at-root {
+        .amountHeader {
+          @apply text-bright-full;
+        }
+        .amountDisplayed{
+            @apply text-2xl text-bright-full tracking-tighter;
+        }
+      }
+    }
+  }
 }

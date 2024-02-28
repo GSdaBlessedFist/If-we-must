@@ -2,9 +2,9 @@
 import { useEffect, useState, useContext } from "react";
 import styles from "./header.module.scss";
 import { useTaxAmountContext } from "../../contexts/TaxAmountProvider";
-import { useTotalRemainingAmountContext } from "@/app/contexts/TotalRemainingAmountProvider";
-import { useCategoryObjectsContext } from "@/app/contexts/CategoryObjectsProvider";
-import p from "@/app/util/consoleHelper";
+import { useTotalRemainingAmountContext } from "../../contexts/TotalRemainingAmountProvider";
+import { useCategoryObjectsContext } from "../../contexts/CategoryObjectsProvider";
+import p from "../../util/consoleHelper";
 import validate from "./validator";
 
 const SOURCE = "Header Component";

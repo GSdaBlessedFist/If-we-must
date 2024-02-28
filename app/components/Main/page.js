@@ -2,10 +2,10 @@
 import { useContext, useEffect, useState } from "react";
 import styles from "./main.module.scss";
 import Category from "../Category/page";
-import { useCategoryObjectsContext } from "@/app/contexts/CategoryObjectsProvider";
+import { useCategoryObjectsContext } from "../../contexts/CategoryObjectsProvider";
 import { useTotalRemainingAmountContext } from "../../contexts/TotalRemainingAmountProvider";
 import { categoryObjects } from "../../categoryObjects";
-import p from "@/app/util/consoleHelper";
+import p from "../../util/consoleHelper";
 
 const SOURCE = "Main";
 const srcColor = 205;
