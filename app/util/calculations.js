@@ -1,14 +1,17 @@
 const p = console.log;
 
 
-const calculator = (taxAmount, divisor = 1, catObj = {},totalRemaining) => {
-  if (divisor === 1 && catObj.amountEntered && catObj.amountEntered.specified === false) {
-    console.log(`Option 1: The remaining amount: ${taxAmount}`)  
-    return `The remaining amount: ${taxAmount}`;
+const calculator = (TAX_AMOUNT, divisor = 1, catObj = {},totalRemaining) => {
+  TAX_AMOUNT = parseFloat(TAX_AMOUNT);
+
+  if (!catObj || !catObj.amountEntered || !catObj.amountEntered.specified) {
+    console.log(`Option 1: The remaining amount: ${TAX_AMOUNT}`)  
+    return TAX_AMOUNT;
     }
-  if (divisor === 1 && catObj.amountEntered && catObj.amountEntered.specified === true) {
+  if (catObj.amountEntered.specified) {
+    const calculatedAmount = TAX_AMOUNT - totalRemaining;
     console.log(`Option 2: The remaining amount: ${taxAmount - totalRemaining}`)  
-    return `The remaining amount: ${taxAmount - totalRemaining}`
+    return calculatedAmount;
   }
   
 };

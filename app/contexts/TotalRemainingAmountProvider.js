@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, createContext, useReducer } from "react";
-import { useTaxAmountContext} from "./TaxAmountProvider";
+import { useTaxAmountContext } from "./TaxAmountProvider";
 import p from "../util/consoleHelper";
 
 const SOURCE = "TotalRemainingAmountPROVIDER";
@@ -22,6 +22,8 @@ const reducer = (state, action) => {
       const finalTotalRemainingAmount = newTotalRemainingAmount < 0 ? 0 : newTotalRemainingAmount;
 
       return { ...state, totalRemainingAmount: finalTotalRemainingAmount };
+    case "UPDATE_TAX_AMOUNT":
+      return { ...state, totalRemainingAmount: action.payload.taxAmount };
     default:
       return state;
   }
@@ -32,16 +34,32 @@ TotalRemainingAmountContext.displayName = "TotalRemainingAmountContext";
 
 const TotalRemainingAmountProvider = ({ children }) => {
 
-  const {TAX_AMOUNT} = useTaxAmountContext();
-
+  const { TAX_AMOUNT } = useTaxAmountContext();
   const [state, dispatch] = useReducer(reducer, { totalRemainingAmount: TAX_AMOUNT });
+
+
+  /////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////
+
 
   const updateTotalRemainingAmount = (amountDisplayed) => {
     dispatch({ type: "UPDATE_TOTAL_REMAINING_AMOUNT", payload: { amountDisplayed } });
   };
 
+
+  /////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////
+
   useEffect(() => {
-    //p(SOURCE,state.totalRemainingAmount,srcColor -6,"total remaining amount")
+    dispatch({ type: "UPDATE_TAX_AMOUNT", payload: ({ taxAmount: TAX_AMOUNT }) })
+  }, [TAX_AMOUNT])
+
+
+
+  useEffect(() => {
+    p(SOURCE,TAX_AMOUNT,srcColor -6,"TAX_AMOUNT")
 
   }, [state.totalRemainingAmount]);
 
@@ -54,6 +72,6 @@ const TotalRemainingAmountProvider = ({ children }) => {
   );
 };
 
-const useTotalRemainingAmountContext = ()=> useContext(TotalRemainingAmountContext);
+const useTotalRemainingAmountContext = () => useContext(TotalRemainingAmountContext);
 
-export { TotalRemainingAmountProvider,useTotalRemainingAmountContext }
+export { TotalRemainingAmountProvider, useTotalRemainingAmountContext }
