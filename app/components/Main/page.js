@@ -11,7 +11,7 @@ const SOURCE = "Main";
 const srcColor = 205;
 
 export default function Main() {
-
+  
   const {
     totalRemainingAmount,
     updateTotalRemainingAmount,
@@ -23,15 +23,18 @@ export default function Main() {
     updateMode,
     updateAmountEntered,
     updateAmountDisplayed,
+    updateTotalRemaining
   } = useCategoryObjectsContext();
 
-
+  useEffect(()=>{
+    console.log('catObjects:', catObjects);
+  },[])
   
   return (
     <>
       <div className={styles.main}>
 
-        {catObjects.map((categoryObject, index) => {
+        {catObjects && Array.isArray(catObjects) && catObjects.map((categoryObject, index) => {
           const categoryName = Object.keys(categoryObject)[0];
           const categoryData = categoryObject[categoryName];
 

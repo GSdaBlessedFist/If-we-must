@@ -75,6 +75,11 @@ const reducer = (state, action) => {
         amountDisplayed
       );
     }
+    case "UPDATE_TOTAL_REMAINING_ACTION":{
+      const { amount } = action.payload;
+      const newTotalRemainingAmount = state.totalRemainingAmount - amount;
+      return { ...state, totalRemainingAmount: newTotalRemainingAmount };
+    }
     default:
       return state;
   }
@@ -113,6 +118,9 @@ const CategoryObjectsProvider = ({ children }) => {
       payload: { categoryName, amountDisplayed },
     });
     p(SOURCE, amountDisplayed, srcColor - 5, `${categoryName} amountDisplayed`);
+  };
+  const updateTotalRemaining = (amount) => {
+    dispatch({ type: "UPDATE_TOTAL_REMAINING_ACTION", payload: { amount } });
   };
   useEffect(() => {
     const updatedCategories = catObjects.filter(
@@ -155,6 +163,7 @@ const CategoryObjectsProvider = ({ children }) => {
     updateMode,
     updateAmountEntered,
     updateAmountDisplayed,
+    updateTotalRemaining
   };
 
   return (

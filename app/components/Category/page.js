@@ -16,7 +16,7 @@ export default function Category({ categoryName }) {
   const { TAX_AMOUNT, updateTaxAmount } = useTaxAmountContext();
   const { totalRemainingAmount, updateTotalRemainingAmount } = useTotalRemainingAmountContext();
   const { catObjects, numberOfSelectedCategories, categoriesWithSpecifiedAmount, updateSelectedStatus,
-    updateMode, updateAmountEntered, updateAmountDisplayed, } = useCategoryObjectsContext();
+    updateMode, updateAmountEntered, updateAmountDisplayed,updateTotalRemaining } = useCategoryObjectsContext();
   
 
   const [mode, setMode] = useState("dollar");
@@ -48,7 +48,8 @@ export default function Category({ categoryName }) {
     console.log(updatedAmountEntered);
     setAmountEntered(updatedAmountEntered);
 
-    return updateAmountEntered(categoryName, updatedAmountEntered);
+    updateAmountEntered(categoryName, updatedAmountEntered);
+    updateTotalRemaining(updatedAmountEntered.amount)
   }
 
   const calculateAmountDisplayed = (amountEntered, mode) => {
@@ -93,14 +94,18 @@ export default function Category({ categoryName }) {
   
   // useEffect(()=>{},[])
   useEffect(() => {
-    console.log(numberOfSelectedCategories)
+    
     
   }, [numberOfSelectedCategories])
 
 
   useEffect(() => {
-    
-  }, [amountEntered, mode])
+    let distributedAmount;
+    if(!categoryObj?.amountEntered.specified) {
+      distributedAmount= totalRemainingAmount/numberOfSelectedCategories;
+      console.log(distributedAmount)
+    }
+  }, [numberOfSelectedCategories])
 
   
   useEffect(() => {
