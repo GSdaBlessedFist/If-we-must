@@ -10,7 +10,7 @@ const taxMachine = createMachine({
   context: {
     TAX_AMOUNT: 0,
     TotalRemainingAmount: 0,
-    categories: categoryObjects,
+    categories: "categoryObjects",
     selectedCategories: [],
   },
   states: {
