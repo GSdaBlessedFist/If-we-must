@@ -15,13 +15,13 @@ export default function PrimeContainer() {
       <TaxMachineProvider>
         {/* <TaxAmountProvider>
           <TotalRemainingAmountProvider>
-            <CategoryObjectsProvider>
+            <CategoryObjectsProvider>*/}
               <div className={styles.primeContainer}>
                 <Header />
-                <Main />
-                <Footer />
+                {/* <Main />
+                <Footer /> */}
               </div>
-            </CategoryObjectsProvider>
+            {/* </CategoryObjectsProvider>
           </TotalRemainingAmountProvider>
         </TaxAmountProvider> */}
       </TaxMachineProvider>

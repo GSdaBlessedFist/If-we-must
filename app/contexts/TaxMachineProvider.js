@@ -13,15 +13,19 @@ const TaxMachineProvider = ({ children }) => {
 
 
     const setTaxAmount = (amount) => {
-        send({ type: "SET_TAX_AMOUNT", amount });
+        p(SOURCE, amount,srcColor,"amount")
+        send({ type: "SET_TAX_AMOUNT", amount: amount });
     };
 
     const selectCategory = (category) => {
+        p(SOURCE, category,srcColor,"category");
         send({ type: "SELECT_CATEGORY", category });
     };
 
     const deselectCategory = (category) => {
+
         send({ type: "DESELECT_CATEGORY", category });
+        p(SOURCE, category,srcColor-33,"category remove");
     };
 
     const changeMode = (categoryName, newMode) => {
