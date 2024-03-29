@@ -5,7 +5,7 @@ import p from "../util/consoleHelper";
 const SOURCE = "taxMachine";
 const srcColor = 155;
 const taxMachine = createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5QBcCGAPA+gW1QYwAsBLAOzADoB3VI5UqTAMwHsAnTNLVbZgVxOQBiAMoBRACqZxAQQAamaQFkA8gFUAcuIDaABgC6iUAAdmsWkWYlDIdIgBMANgCc5AIwBWB3YAsrgBwAzK6+3oEANCAAnvYA7Hbk7n4xTn46rnY6Dn52MQC+uRGcOPjEZOSwYAA2YHh0JAx4qMhgUGxEcCISUnIKKhra+tYmZnSW1rYIWfE6MzreMTruTk7BARHRCEEO5HYByYHeOnEBAZn5hRjFhKQUFdW19JiNza2s7bCdADKiAMKSP9JxKIAOLKABKAE1dAYkCBhuYxrCJg4Yn5yDEAt5vHYPIs9hj1ohXE53ORAq4Yp5lu5TgEHN5ziAirhrmU7jU6g0mi02h0ACKiMTfP6YAFA0GQ6FDUwIqxIxAOLLo7F2XaBE5+PyEhCU8jY9w0xbqmK+RnMko3cpVDmPZ48t4dH4ACWk6mBokwKgFUth8NGctAyKcAXIM1RMVcKMNEe1AFp-Akcokgv5TliYnkCkzLizSrdrQ96k9ua93oJVAAFPmAj1KNSaTCiTSiMGiPk+4wy-3jBXebYOHROQ5BeYOdyUuOudJ61IRrHedyLDx+M05i1sguc4svXkfAGfH6qT41qTKGSfTCtxTSACS6jvwN69YGMM7IwsAZs9mcbk8PlTwTBOEUSIHSaLuL4g5+H2diBA4rirlguaWo0lR4LwlRNI83B8AInSSOIZ7SBeV63vebpPv0HZwl2H49ggjguB4Xi+OSITARsvgxKGviuJiUyeP47j5FmJDMBAcDWOarJgNK76IoGiCxg4k7LOQKRHGkWR+PBBqIVceZUDQW4sOwRQ4fwyBybK9HYtqdgkmSwQQe4DlOI4-j6chG73FudqlpJvq0QpX6TDE2wRpqaSLNiCwxNqviksSU7BBiAQaZGXnrhQqHoZhW4WQI1ndvKYXok4WQOHsMx+J4Oh2Alg56uOqQnO4FIOT4Im5EAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QBcCGAPA+gW1QYwAsBLAOzADoB3VI5UqTAMwHsAnTNLVbZgVxOQBiAMoBRACqZxAQQAamaQFkA8gFUAcuIDaABgC6iUAAdmsWkWYlDIdIgBMANgCc5AIwBWB3feuALK6cAZgAOOx1fABoQAE9EXwB2X3JPYODXVwdfMId3OwBfPKjOHHxiMnJYMAAbMDw6EgY8VGQwKDYiOBEJKTkFFQ1tfWsTMzpLa1sEB2CknTmdO0DXJa9EqNiEH2DyO1dg+LtgnXdPHUCCoowSwlIKSpq6+kwmlrbWDtgugBlRAGFJX7ScSiADiygASgBNXQGJAgEbmcZwybTHTkeKBXyBIKhQLxJxOVzrRDY9zkNJ2XxpdyBOwHByYi4gYq4G7le61eqNZqtdqdAAiojEP3+mEBwLBUJhw1MiKsyMQDniaMSdjCc2WwUCx2JCDpgXIvh0XkC7jmThmTkyTJZpVuFWqnKeL15706vwAEtJ1CDRJgVILpXCEWN5aAUU4yXN4viaXYnP54g5da4Y4aaeknAdcTMbVdWWU7o7Hg1njy3h9BKoAAr8oF+pRqTSYUSaUTg0T8oPGWWhiaKqnkBw6HE5QLapx03VpZLzcK+XwOVb5QrM-N29nFrll158z6Ar6-VRfetSZQyL6YDuKaQASXU95BfSbg1hPdGFjDNnszjcnm8fgBCEYSRDEiDuMqyS7JOziLEqOR5lgBb2k0VR4LwVTNE83B8AIXSSOI57SJe153g+PrPgM3bwr2n79nqv4eF4Pj+DiIG6l4rjkAseyJPEwQJkc7gFKuJDMBAcDWLabJgDKH5IuGiAALTJmBCAqYh1yFlQNDbiw7DFDh-DIHJcr0Vkuq+Fm6KRuOWRGlZlKachm4PNuLoVpJwa0Qp35TPi6K8e4WKOGarh2BxARuPEexYuOBx+Ocq7SdpqHoZh25GQIpl9gq-k2dMsE6MEDjhQykUGliwRmgmxy5E4Il5EAA */
   id: "tax_machine",
   initial: "waiting_for_tax_amount",
   context: {
@@ -51,24 +51,24 @@ const taxMachine = createMachine({
           actions: [
             assign({
               categories: (context, event) => {
-                const categoryName = context.event.category;
-
-                const updatedCategories = context.context.categories.map(category => {
+                const categoryName = context.event.category; // Use event.category, not context.event.category
+          
+                const updatedCategories = context.context.categories.map(category => { // Directly use context.categories
                   const key = Object.keys(category)[0];
                   if (key === categoryName) {
                     return {
                       ...category,
                       [key]: {
                         ...category[key],
-                        selected: !category[key].selected,
-                      }
+                        selected: true, // Toggle the selected state
+                      },
                     };
                   }
                   return category;
                 });
-
-                return updatedCategories;
-              }
+          
+                return updatedCategories; // Return the correctly updated categories list
+              },
             })
             ,
             assign({
@@ -126,9 +126,9 @@ const taxMachine = createMachine({
                 });
 
 
-                p(SOURCE, totalEnteredPercentage, srcColor, "totalEnteredPercentage")
-                p(SOURCE, selectedCategories, srcColor, "selectedCategories")
-                p(SOURCE, updatedCategories, srcColor, "updatedCategories")
+                //p(SOURCE, totalEnteredPercentage, srcColor, "totalEnteredPercentage")
+                p(SOURCE, updatedCategories, srcColor, "updatedCategories: SELECT")
+                p(SOURCE, selectedCategories, srcColor, "selectedCategories: SELECT")
                 return updatedCategories;
               },
             }),
@@ -146,15 +146,16 @@ const taxMachine = createMachine({
                       ...category,
                       [key]: {
                         ...category[key],
-                        selected: !category[key].selected,
+                        selected: false,
                       }
                     };
                   }
                   return category;
-                }); // Added closing parenthesis here
-                p(SOURCE, updatedCategories.filter(category => category[Object.keys(category)[0]].selected),srcColor, "selectedCategory")
+                });
+                p(SOURCE, updatedCategories, srcColor - 25, "updatedCategories: DESELECT")
+                p(SOURCE, updatedCategories.filter(category => category[Object.keys(category)[0]].selected), srcColor - 25, "selectedCategories: DESELECT")
                 return updatedCategories;
-              }, // Added closing parenthesis here
+              },
             }),
             assign({
               categories: (context) => {
@@ -171,7 +172,7 @@ const taxMachine = createMachine({
                   },
                   0
                 );
-        
+
                 const updatedCategories = context.context.categories.map((category) => {
                   if (category[Object.keys(category)[0]].selected) {
                     const categoryObject =

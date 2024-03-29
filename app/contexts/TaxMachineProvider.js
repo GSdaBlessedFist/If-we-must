@@ -25,7 +25,7 @@ const TaxMachineProvider = ({ children }) => {
     const deselectCategory = (category) => {
 
         send({ type: "DESELECT_CATEGORY", category });
-        p(SOURCE, category,srcColor-33,"category remove");
+        p(SOURCE, category,srcColor-33,"category removed");
     };
 
     const changeMode = (categoryName, newMode) => {
