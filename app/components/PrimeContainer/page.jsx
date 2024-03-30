@@ -18,8 +18,8 @@ export default function PrimeContainer() {
             <CategoryObjectsProvider>*/}
               <div className={styles.primeContainer}>
                 <Header />
-                {/* <Main />
-                <Footer /> */}
+                <Main />
+                {/* <Footer /> */}
               </div>
             {/* </CategoryObjectsProvider>
           </TotalRemainingAmountProvider>

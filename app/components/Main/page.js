@@ -2,8 +2,7 @@
 import { useContext, useEffect, useState } from "react";
 import styles from "./main.module.scss";
 import Category from "../Category/page";
-import { useCategoryObjectsContext } from "../../contexts/CategoryObjectsProvider";
-import { useTotalRemainingAmountContext } from "../../contexts/TotalRemainingAmountProvider";
+import { useTaxMachineContext } from "../../contexts/TaxMachineProvider";
 import { categoryObjects } from "../../categoryObjects";
 import p from "../../util/consoleHelper";
 
@@ -11,27 +10,19 @@ const SOURCE = "Main";
 const srcColor = 205;
 
 export default function Main() {
-
-  const {
-    totalRemainingAmount,
-    updateTotalRemainingAmount,
-  } = useTotalRemainingAmountContext();
-  const {
-    catObjects,
-    categoriesWithSpecifiedAmount,
-    updateSelectedStatus,
-    updateMode,
-    updateAmountEntered,
-    updateAmountDisplayed,
-  } = useCategoryObjectsContext();
-
-
+  const { state } = useTaxMachineContext();
+  const {TAX_AMOUNT,TotalRemainingAmount} = state.context;
   
+  useEffect(() => {
+    //p(SOURCE, state.context,srcColor, "context");
+    console.log(state.context)
+  },[state.context])
+
   return (
     <>
       <div className={styles.main}>
 
-        {catObjects.map((categoryObject, index) => {
+        {/* {catObjects.map((categoryObject, index) => {
           const categoryName = Object.keys(categoryObject)[0];
           const categoryData = categoryObject[categoryName];
 
@@ -40,7 +31,7 @@ export default function Main() {
             <Category key={`category-${index}`} categoryName={categoryName}  />
           ) : null;
 
-        })}
+        })} */}
       </div>
     </>
   );

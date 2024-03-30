@@ -19,16 +19,7 @@ const taxMachine = createMachine({
       on: {
         SET_TAX_AMOUNT: {
           target: "selecting_categories",
-          actions: assign({
-            TAX_AMOUNT: (context, event) => {
-              //✅p(SOURCE,context.event.amount,srcColor,"TaxAmount:");
-              return context.event.amount;
-            },
-            TotalRemainingAmount: (context, event) => {
-              //✅p(SOURCE, context.event.amount,srcColor - 10,"TotalRemainingAmount received:");
-              return context.event.amount;
-            },
-          }),
+          actions: ['SET_TAX_AMOUNT.updateTAXandTotalRemainingAmount:']
         },
       },
     },
@@ -36,214 +27,19 @@ const taxMachine = createMachine({
       on: {
         SET_TAX_AMOUNT: {
           target: "selecting_categories",
-          actions: assign({
-            TAX_AMOUNT: (context, event) => {
-              //✅p(SOURCE,context.event.amount,srcColor,"TaxAmount:");
-              return context.event.amount;
-            },
-            TotalRemainingAmount: (context, event) => {
-              //✅p(SOURCE, context.event.amount,srcColor - 10,"TotalRemainingAmount received:");
-              return context.event.amount;
-            },
-          }),
+          actions: ['SET_TAX_AMOUNT.updateTAXandTotalRemainingAmount']
         },
         SELECT_CATEGORY: {
-          actions: [
-            assign({
-              categories: (context, event) => {
-                const categoryName = context.event.category; // Use event.category, not context.event.category
-          
-                const updatedCategories = context.context.categories.map(category => { // Directly use context.categories
-                  const key = Object.keys(category)[0];
-                  if (key === categoryName) {
-                    return {
-                      ...category,
-                      [key]: {
-                        ...category[key],
-                        selected: true, // Toggle the selected state
-                      },
-                    };
-                  }
-                  return category;
-                });
-          
-                return updatedCategories; // Return the correctly updated categories list
-              },
-            })
-            ,
-            assign({
-              categories: (context) => {
-
-
-
-                const selectedCategories = context.context.categories.filter(category => {
-                  const catObj = Object.values(category)[0];
-                  return catObj.selected;
-                });
-
-                // Calculate the total entered percentage and ensure it does not exceed 100%
-                const totalEnteredPercentage = selectedCategories.reduce((total, category) => {
-                  const catObj = Object.values(category)[0];
-                  if (catObj.mode === "percentage") {
-                    // Using amountEntered as the percentage value
-                    const enteredPercentage = catObj.amountEntered.amount || 0;
-                    return total + enteredPercentage;
-                  }
-                  return total;
-                }, 0);
-
-                if (totalEnteredPercentage > 100) {
-                  // Handle error: Total percentage exceeds 100%
-                  console.error("Total percentage exceeds 100%");
-                  return; // Skip updating categories or handle as needed
-                }
-
-                const updatedCategories = context.context.categories.map(category => {
-                  const key = Object.keys(category)[0];
-                  const catObj = category[key];
-
-                  // Skip unselected categories
-                  if (!catObj.selected) return category;
-
-                  let categoryAmount = catObj.amountDisplayed; // Default to existing amountDisplayed
-
-                  if (catObj.mode === "percentage") {
-                    // Calculate the amount based on the percentage of TotalRemainingAmount
-                    const percentage = catObj.amountEntered.amount || 0;
-                    categoryAmount = (percentage / 100) * context.TotalRemainingAmount;
-                  } else if (catObj.mode === "dollar") {
-                    categoryAmount = catObj.amountEntered.amount
-                  }
-
-                  // Update the category with the calculated amountDisplayed
-                  return {
-                    ...category,
-                    [key]: {
-                      ...catObj,
-                      amountDisplayed: categoryAmount,
-                    },
-                  };
-                });
-
-
-                //p(SOURCE, totalEnteredPercentage, srcColor, "totalEnteredPercentage")
-                p(SOURCE, updatedCategories, srcColor, "updatedCategories: SELECT")
-                p(SOURCE, selectedCategories, srcColor, "selectedCategories: SELECT")
-                return updatedCategories;
-              },
-            }),
-          ],
+          actions: ['SELECT_CATEGORY.updateSelectedCategories','SELECT_CATEGORY.updateCategories'],
         },
         DESELECT_CATEGORY: {
-          actions: [
-            assign({
-              selectedCategories: (context, event) => {
-                const categoryName = context.event.category;
-                const updatedCategories = context.context.categories.map((category) => {
-                  const key = Object.keys(category)[0];
-                  if (key === categoryName) {
-                    return {
-                      ...category,
-                      [key]: {
-                        ...category[key],
-                        selected: false,
-                      }
-                    };
-                  }
-                  return category;
-                });
-                p(SOURCE, updatedCategories, srcColor - 25, "updatedCategories: DESELECT")
-                p(SOURCE, updatedCategories.filter(category => category[Object.keys(category)[0]].selected), srcColor - 25, "selectedCategories: DESELECT")
-                return updatedCategories;
-              },
-            }),
-            assign({
-              categories: (context) => {
-                const enabledCategories = context.context.selectedCategories.filter(
-                  (category) => category.selected
-                );
-                const enabledCategoriesCount = enabledCategories.length;
-                const totalPercentageCategories = enabledCategories.reduce(
-                  (acc, category) => {
-                    const categoryObject = category[Object.keys(category)[0]];
-                    return categoryObject.mode === "percentage"
-                      ? acc + 1
-                      : acc;
-                  },
-                  0
-                );
-
-                const updatedCategories = context.context.categories.map((category) => {
-                  if (category[Object.keys(category)[0]].selected) {
-                    const categoryObject =
-                      category[Object.keys(category)[0]];
-                    let categoryAmount = 0;
-                    if (categoryObject.mode === "percentage") {
-                      const remainingPercentage = 100 - totalPercentageCategories * (100 / enabledCategoriesCount);
-                      categoryAmount = (remainingPercentage / 100) * context.TotalRemainingAmount;
-                    } else {
-                      categoryAmount = context.TotalRemainingAmount / enabledCategoriesCount;
-                    }
-                    return {
-                      ...category,
-                      [Object.keys(category)[0]]: {
-                        ...categoryObject,
-                        amountDisplayed: categoryAmount,
-                      },
-                    };
-                  }
-                  return category;
-                });
-                return updatedCategories;
-              },
-            }),
-          ],
+          actions: ['DESELECT_CATEGORY.updateSelectedCategories','DESELECT_CATEGORY.updateCategories']
         },
         CHANGE_MODE: {
-          actions: assign({
-            categories: (context, event) => {
-              return context.categories.map(category => {
-                if (Object.keys(category)[0] === event.categoryName) {
-                  let updatedCategory = { ...category };
-                  updatedCategory[event.categoryName].mode = event.newMode;
-
-                  if (event.newMode === "dollar") {
-                    // Assuming switching to dollar should use the last known dollar amount or split equally if not available
-                    updatedCategory[event.categoryName].amountDisplayed = updatedCategory[event.categoryName].amountEntered.amount || context.TAX_AMOUNT / context.selectedCategories.length;
-                  } else if (event.newMode === "percentage") {
-                    // When switching to percentage, calculate based on the proportion of TAX_AMOUNT
-                    const amount = updatedCategory[event.categoryName].amountEntered.amount || context.TAX_AMOUNT / context.selectedCategories.length;
-                    updatedCategory[event.categoryName].amountDisplayed = (amount / context.TAX_AMOUNT) * 100;
-                  }
-
-                  return updatedCategory;
-                }
-                return category;
-              });
-            }
-          }),
+          actions: ['CHANGE_MODE.updateCategories']
         },
         UPDATE_AMOUNT_ENTERED: {
-          actions: assign({
-            categories: (context, event) => {
-              return context.categories.map(category => {
-                if (Object.keys(category)[0] === event.categoryName) {
-                  let updatedCategory = { ...category };
-                  updatedCategory[event.categoryName].amountEntered.amount = parseFloat(event.amount);
-
-                  if (updatedCategory[event.categoryName].mode === 'dollar') {
-                    updatedCategory[event.categoryName].amountDisplayed = parseFloat(event.amount);
-                  } else {
-                    // Convert the entered dollar amount to a percentage of the total tax amount
-                    updatedCategory[event.categoryName].amountDisplayed = (parseFloat(event.amount) / context.TAX_AMOUNT) * 100;
-                  }
-
-                  return updatedCategory;
-                }
-                return category;
-              });
-            }
-          }),
+          actions: ['UPDATE_AMOUNT_ENTERED.updateCategories']
         },
         CALCULATE_TOTAL_REMAINING_AMOUNT: "calculating_amount",
       },
@@ -253,7 +49,175 @@ const taxMachine = createMachine({
         SET_TOTAL_REMAINING_AMOUNT: "selecting_categories",
       },
     },
-  },
-});
+  },{
+  actions: {
+    'SET_TAX_AMOUNT.updateTAXandTotalRemainingAmount':assign({
+      TAX_AMOUNT: (context, event) => {
+        //✅p(SOURCE,context.event.amount,srcColor,"TaxAmount:");
+        return context.event.amount;
+      },
+      TotalRemainingAmount: (context, event) => {
+        //✅p(SOURCE, context.event.amount,srcColor - 10,"TotalRemainingAmount received:");
+        return context.event.amount;
+      },
+    }),
+    'SELECT_CATEGORY.updateSelectedCategories': assign({
+      selectedCategories: (context, event) => {
+        const categoryName = context.event.category; 
+        if (!context.context.selectedCategories.includes(categoryName)) {
+          return [...context.context.selectedCategories, categoryName];
+        }
+        return context.selectedCategories;
+      },
+    }),
+    'SELECT_CATEGORY.updateCategories': assign({
+      categories: (context) => {
+        const selectedCategories = context.context.categories.filter(category => {
+          const catObj = Object.values(category)[0];
+          return catObj.selected;
+        });
+
+        // Calculate the total entered percentage and ensure it does not exceed 100%
+        const totalEnteredPercentage = selectedCategories.reduce((total, category) => {
+          const catObj = Object.values(category)[0];
+          if (catObj.mode === "percentage") {
+            // Using amountEntered as the percentage value
+            const enteredPercentage = catObj.amountEntered.amount || 0;
+            return total + enteredPercentage;
+          }
+          return total;
+        }, 0);
+
+        if (totalEnteredPercentage > 100) {
+          // Handle error: Total percentage exceeds 100%
+          console.error("Total percentage exceeds 100%");
+          return; // Skip updating categories or handle as needed
+        }
+
+        const updatedCategories = context.context.categories.map(category => {
+          const key = Object.keys(category)[0];
+          const catObj = category[key];
+
+          // Skip unselected categories
+          if (!catObj.selected) return category;
+
+          let categoryAmount = catObj.amountDisplayed; // Default to existing amountDisplayed
+
+          if (catObj.mode === "percentage") {
+            // Calculate the amount based on the percentage of TotalRemainingAmount
+            const percentage = catObj.amountEntered.amount || 0;
+            categoryAmount = (percentage / 100) * context.TotalRemainingAmount;
+          } else if (catObj.mode === "dollar") {
+            categoryAmount = catObj.amountEntered.amount
+          }
+
+          // Update the category with the calculated amountDisplayed
+          return {
+            ...category,
+            [key]: {
+              ...catObj,
+              amountDisplayed: categoryAmount,
+            },
+          };
+        });
+
+
+        //p(SOURCE, totalEnteredPercentage, srcColor, "totalEnteredPercentage")
+        p(SOURCE, updatedCategories, srcColor, "updatedCategories: SELECT")
+        p(SOURCE, selectedCategories, srcColor, "selectedCategories: SELECT")
+        return updatedCategories;
+      },
+    }),
+    'DESELECT_CATEGORY.updateSelectedCategories': assign({
+      selectedCategories: (context, event) => {
+        const categoryName = context.event.category; // Use event.category
+        return context.context.selectedCategories.filter(cat => cat !== categoryName);
+      },
+    }),
+    'DESELECT_CATEGORY.updateCategories':assign({
+      categories: (context) => {
+        const enabledCategories = context.context.selectedCategories.filter(
+          (category) => category.selected
+        );
+        const enabledCategoriesCount = enabledCategories.length;
+        const totalPercentageCategories = enabledCategories.reduce(
+          (acc, category) => {
+            const categoryObject = category[Object.keys(category)[0]];
+            return categoryObject.mode === "percentage"
+              ? acc + 1
+              : acc;
+          },
+          0
+        );
+
+        const updatedCategories = context.context.categories.map((category) => {
+          if (category[Object.keys(category)[0]].selected) {
+            const categoryObject =
+              category[Object.keys(category)[0]];
+            let categoryAmount = 0;
+            if (categoryObject.mode === "percentage") {
+              const remainingPercentage = 100 - totalPercentageCategories * (100 / enabledCategoriesCount);
+              categoryAmount = (remainingPercentage / 100) * context.TotalRemainingAmount;
+            } else {
+              categoryAmount = context.TotalRemainingAmount / enabledCategoriesCount;
+            }
+            return {
+              ...category,
+              [Object.keys(category)[0]]: {
+                ...categoryObject,
+                amountDisplayed: categoryAmount,
+              },
+            };
+          }
+          return category;
+        });
+        return updatedCategories;
+      },
+    }),
+    'CHANGE_MODE.updateCategories': assign({
+      categories: (context, event) => {
+        return context.categories.map(category => {
+          if (Object.keys(category)[0] === event.categoryName) {
+            let updatedCategory = { ...category };
+            updatedCategory[event.categoryName].mode = event.newMode;
+
+            if (event.newMode === "dollar") {
+              // Assuming switching to dollar should use the last known dollar amount or split equally if not available
+              updatedCategory[event.categoryName].amountDisplayed = updatedCategory[event.categoryName].amountEntered.amount || context.TAX_AMOUNT / context.selectedCategories.length;
+            } else if (event.newMode === "percentage") {
+              // When switching to percentage, calculate based on the proportion of TAX_AMOUNT
+              const amount = updatedCategory[event.categoryName].amountEntered.amount || context.TAX_AMOUNT / context.selectedCategories.length;
+              updatedCategory[event.categoryName].amountDisplayed = (amount / context.TAX_AMOUNT) * 100;
+            }
+
+            return updatedCategory;
+          }
+          return category;
+        });
+      }
+    }),
+    'UPDATE_AMOUNT_ENTERED.updateCategories': assign({
+      categories: (context, event) => {
+        return context.categories.map(category => {
+          if (Object.keys(category)[0] === event.categoryName) {
+            let updatedCategory = { ...category };
+            updatedCategory[event.categoryName].amountEntered.amount = parseFloat(event.amount);
+
+            if (updatedCategory[event.categoryName].mode === 'dollar') {
+              updatedCategory[event.categoryName].amountDisplayed = parseFloat(event.amount);
+            } else {
+              // Convert the entered dollar amount to a percentage of the total tax amount
+              updatedCategory[event.categoryName].amountDisplayed = (parseFloat(event.amount) / context.TAX_AMOUNT) * 100;
+            }
+
+            return updatedCategory;
+          }
+          return category;
+        });
+      }
+    })
+  }
+}
+);
 
 export default taxMachine;
