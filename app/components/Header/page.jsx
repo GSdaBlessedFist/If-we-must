@@ -20,8 +20,8 @@ export default function Header() {
 
   
   function handleUpdateTaxAmount(e) {
-    const newValue = parseInt(e.target.value) || 0
-    p(SOURCE,newValue,srcColor,"taxAmount");
+    const newValue = parseInt(e.target.value) || 0;
+    p(SOURCE,newValue,srcColor,"tax amount");
     setTaxAmount(newValue);
     setInputValue(newValue);
     //debouncedHandleUpdateTaxAmount(newValue);
@@ -43,8 +43,13 @@ export default function Header() {
 
   useEffect(() => {
     localStorage.setItem("tax_amount", TAX_AMOUNT);
-    //p(SOURCE,TAX_AMOUNT,srcColor,"TAX_AMOUNT");
+    p(SOURCE,TAX_AMOUNT,srcColor,"TAX_AMOUNT");
+    p(SOURCE,TotalRemainingAmount,srcColor+25,"Total Remaining Amount"); 
   }, [TAX_AMOUNT]);
+
+  useState(() => {
+    p(SOURCE,state.context.selectedCategories,srcColor+12,"selectedCategories")
+  },[state.context.selectedCategories]); 
 
   return (
     <div className={styles.header}>
@@ -60,7 +65,7 @@ export default function Header() {
               maxLength="5"
             />
           </div>
-          {TAX_AMOUNT ? (
+          {TAX_AMOUNT  ? (
             <div className={styles.remainingAmountSection}>
               <h2 className="text-bright-full">Remaining: $</h2>
               <div className="w-12 m-3">

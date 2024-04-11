@@ -8,27 +8,28 @@ const srcColor = 55;
 
 const TaxMachineContext = createContext();
 
+
 const TaxMachineProvider = ({ children }) => {
     const [state, send] = useMachine(taxMachine);
 
 
     const setTaxAmount = (amount) => {
-        p(SOURCE, amount,srcColor,"amount")
+        p(SOURCE, amount,srcColor,"tax amount")
         send({ type: "SET_TAX_AMOUNT", amount: amount });
     };
 
     const selectCategory = (category) => {
-        p(SOURCE, category,srcColor,"category");
         send({ type: "SELECT_CATEGORY", category });
+        p(SOURCE, category,srcColor,"category selected");
     };
 
     const deselectCategory = (category) => {
-
         send({ type: "DESELECT_CATEGORY", category });
         p(SOURCE, category,srcColor-33,"category removed");
     };
 
     const changeMode = (categoryName, newMode) => {
+        p(SOURCE, newMode,srcColor,"mode")
         send({ type: "CHANGE_MODE", categoryName, newMode });
     };
 
@@ -45,8 +46,7 @@ const TaxMachineProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        console.log(contextValue);
-
+        //console.log(contextValue);
     }, []);
 
     return (

@@ -11,18 +11,23 @@ const srcColor = 205;
 
 export default function Main() {
   const { state } = useTaxMachineContext();
-  const {TAX_AMOUNT,TotalRemainingAmount} = state.context;
+  const {TAX_AMOUNT,TotalRemainingAmount,categories} = state.context;
   
   useEffect(() => {
-    //p(SOURCE, state.context,srcColor, "context");
-    console.log(state.context)
+    
+    console.log("categories");
+    console.log(categories)
   },[state.context])
 
   return (
     <>
       <div className={styles.main}>
+      
 
-        {/* {catObjects.map((categoryObject, index) => {
+
+
+
+        {state.context.categories.map((categoryObject, index) => {
           const categoryName = Object.keys(categoryObject)[0];
           const categoryData = categoryObject[categoryName];
 
@@ -31,7 +36,7 @@ export default function Main() {
             <Category key={`category-${index}`} categoryName={categoryName}  />
           ) : null;
 
-        })} */}
+        })}
       </div>
     </>
   );

@@ -3,9 +3,7 @@ import React, { useState, useContext, useEffect } from "react";
 import debounce from "debounce";
 import p from "../../util/consoleHelper";
 import styles from "./category.module.scss";
-import { useTaxAmountContext } from "../../contexts/TaxAmountProvider";
-import { useTotalRemainingAmountContext } from "../../contexts/TotalRemainingAmountProvider";
-import { useCategoryObjectsContext } from "../../contexts/CategoryObjectsProvider";
+import { useTaxMachineContext } from "../../contexts/TaxMachineProvider";
 
 
 const SOURCE = "Category Component";
@@ -13,68 +11,70 @@ const srcColor = 205;
 
 export default function Category({ categoryName }) {
 
-  const { TAX_AMOUNT, updateTaxAmount } = useTaxAmountContext();
-  const { totalRemainingAmount, updateTotalRemainingAmount } = useTotalRemainingAmountContext();
-  const { catObjects, numberOfSelectedCategories, categoriesWithSpecifiedAmount, updateSelectedStatus,
-    updateMode, updateAmountEntered, updateAmountDisplayed, } = useCategoryObjectsContext();
+  // const { TAX_AMOUNT, updateTaxAmount } = useTaxAmountContext();
+  // const { totalRemainingAmount, updateTotalRemainingAmount } = useTotalRemainingAmountContext();
+  // const { catObjects, numberOfSelectedCategories, categoriesWithSpecifiedAmount, updateSelectedStatus,
+  //   updateMode, updateAmountEntered, updateAmountDisplayed, } = useCategoryObjectsContext();
   
+  const { state,changeMode,updateAmountEntered } = useTaxMachineContext();
+  const {TAX_AMOUNT,TotalRemainingAmount,categories} = state.context;
+
 
   const [mode, setMode] = useState("dollar");
-  const [amountEntered, setAmountEntered] = useState({ specified: false, amount: 0 });
-  const [categoryObj, setCategoryObj] = useState();
-  const [amountDisplayed, setAmountDisplayed] = useState(TAX_AMOUNT);
+  // const [amountEntered, setAmountEntered] = useState({ specified: false, amount: 0 });
+  // const [categoryObj, setCategoryObj] = useState();
+  // const [amountDisplayed, setAmountDisplayed] = useState(TAX_AMOUNT);
   const [placeholderValue, setPlaceholderValue] = useState();
 
 
   const handleUpdateCategoryMode = (e, categoryName) => {
     const newMode = (e.target.innerHTML === "$") ? "dollar" : "percent";
-    updateMode(categoryName, newMode)
-
-    setMode(newMode)
+    setMode(newMode);
+    changeMode(categoryName, newMode);
   };
 
-  const handleUpdateAmountEntered = (e, categoryName) => {
-    const updatedAmountEntered = {
-      specified: (() => {
-        if (!e.target.value) {
-          return false;
-        } else {
-          return true;
-        }
-      })(),
-      amount: parseFloat(e.target.value) || 0
-    };
+  // const handleUpdateAmountEntered = (e, categoryName) => {
+  //   const updatedAmountEntered = {
+  //     specified: (() => {
+  //       if (!e.target.value) {
+  //         return false;
+  //       } else {
+  //         return true;
+  //       }
+  //     })(),
+  //     amount: parseFloat(e.target.value) || 0
+  //   };
 
-    console.log(updatedAmountEntered);
-    setAmountEntered(updatedAmountEntered);
+  //   console.log(updatedAmountEntered);
+  //   setAmountEntered(updatedAmountEntered);
 
-    return updateAmountEntered(categoryName, updatedAmountEntered);
-  }
+  //   return updateAmountEntered(categoryName, updatedAmountEntered);
+  // }
 
-  const calculateAmountDisplayed = (amountEntered, mode) => {
-    let amountToDisplay;
+  // const calculateAmountDisplayed = (amountEntered, mode) => {
+  //   let amountToDisplay;
 
-    if (numberOfSelectedCategories === 1 && amountEntered.specified === false) {
-      console.log("LINE:66")
-    }
-
-
-    if (mode === "percent") {
-      amountToDisplay = totalRemainingAmount * (amountEntered.amount / 100);
-    } else {
-      amountToDisplay = amountEntered.amount
-    }
-    console.log(amountToDisplay, mode)
-    //updateAmountDisplayed()
-    setAmountDisplayed(amountToDisplay)
-  }
+  //   if (numberOfSelectedCategories === 1 && amountEntered.specified === false) {
+  //     console.log("LINE:66")
+  //   }
 
 
+  //   if (mode === "percent") {
+  //     amountToDisplay = totalRemainingAmount * (amountEntered.amount / 100);
+  //   } else {
+  //     amountToDisplay = amountEntered.amount
+  //   }
+  //   console.log(amountToDisplay, mode)
+  //   //updateAmountDisplayed()
+  //   setAmountDisplayed(amountToDisplay)
+  // }
 
 
 
 
-  const debouncedHandleUpdateAmountEntered = debounce(handleUpdateAmountEntered, 750)
+
+
+  //const debouncedHandleUpdateAmountEntered = debounce(handleUpdateAmountEntered, 750)
 
   ///////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////
@@ -92,20 +92,16 @@ export default function Category({ categoryName }) {
 
   
   // useEffect(()=>{},[])
-  useEffect(() => {
-    console.log(numberOfSelectedCategories)
-    
-  }, [numberOfSelectedCategories])
+  useEffect(()=>{
+    p(SOURCE,categories[categoryName],srcColor,"categories[categoryName]")
+  },[])
 
 
-  useEffect(() => {
-    
-  }, [amountEntered, mode])
 
   
-  useEffect(() => {
-    setPlaceholderValue((totalRemainingAmount === 0) ? localStorage.getItem("tax_amount") : totalRemainingAmount)//👀
-  }, [amountDisplayed, updateTotalRemainingAmount]);
+  // useEffect(() => {
+  //   setPlaceholderValue((totalRemainingAmount === 0) ? localStorage.getItem("tax_amount") : totalRemainingAmount)//👀
+  // }, [amountDisplayed, updateTotalRemainingAmount]);
 
 
 
@@ -142,7 +138,7 @@ export default function Category({ categoryName }) {
         </div>
         <div className={styles.amountSection}>
           <div className={styles.amountHeader}>Calculated:</div>
-          <div className={styles.amountDisplayed}>${amountDisplayed}</div>
+          <div className={styles.amountDisplayed}>10</div>
         </div>
       </div>
     </>
