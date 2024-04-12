@@ -25,15 +25,17 @@ const TaxMachineProvider = ({ children }) => {
 
     const deselectCategory = (category) => {
         send({ type: "DESELECT_CATEGORY", category });
-        p(SOURCE, category,srcColor-33,"category removed");
+        p(SOURCE, category,srcColor-5,"category removed");
     };
 
     const changeMode = (categoryName, newMode) => {
-        p(SOURCE, newMode,srcColor,"mode")
+        p(SOURCE, newMode,srcColor-10,"mode")
         send({ type: "CHANGE_MODE", categoryName, newMode });
     };
 
     const updateAmountEntered = (categoryName, amount) => {
+        p(SOURCE,amount, srcColor - 15,"amount entered")
+        p(SOURCE,categoryName, srcColor - 15,"categoryName")
         send({ type: "UPDATE_AMOUNT_ENTERED", categoryName, amount });
     };
     const contextValue = {

@@ -38,12 +38,12 @@ const taxMachine = createMachine({
           target: "selecting_categories",
           actions: assign({
             TAX_AMOUNT: (context, event) => {
-              p(SOURCE, event.amount, srcColor, "TaxAmount:");
-              return event.amount;
+              p(SOURCE, context.event.amount, srcColor, "TaxAmount:");
+              return context.event.amount;
             },
             TotalRemainingAmount: (context, event) => {
-              p(SOURCE, event.amount, srcColor - 10, "TotalRemainingAmount received:");
-              return event.amount;
+              p(SOURCE, context.event.amount, srcColor - 10, "TotalRemainingAmount received:");
+              return context.event.amount;
             },
           })
         },
@@ -52,17 +52,16 @@ const taxMachine = createMachine({
             selectedCategories: (context, event) => {
               const categoryName = context.event.category;
               if (!context.context.selectedCategories.includes(categoryName)) {
-                return [...context.context.selectedCategories,context.context.selectedCategories, categoryName];
+                return [...context.context.selectedCategories, categoryName];
               }
-              console.log("HERE")
-              p(SOURCE,context.context.selectedCategories,srcColor,"SELECT_CATEGORY: selectedCategories")
+              p(SOURCE, context.context.selectedCategories, srcColor, "SELECT_CATEGORY: selectedCategories")
               return context.context.selectedCategories;
             },
             categories: (context, event) => {
               // Map through categories to update the selected category and its amount based on the mode (percentage or dollar)
               const updatedCategories = context.context.categories.map(category => {
                 const [key, value] = Object.entries(category)[0];
-        
+
                 if (key === context.event.category) {
                   // Update the selected property and calculate the amount based on the mode
                   let updatedCategory = {
@@ -72,11 +71,11 @@ const taxMachine = createMachine({
                       selected: true,
                     }
                   };
-        
+
                   if (value.mode === "percentage") {
                     // Calculate the amount based on the entered percentage
                     const enteredPercentage = value.amountEntered.amount || 0;
-                    const calculatedAmount = (enteredPercentage / 100) * context.TAX_AMOUNT;
+                    const calculatedAmount = (enteredPercentage / 100) * context.context.TAX_AMOUNT;
                     updatedCategory[key] = {
                       ...value,
                       amountDisplayed: calculatedAmount,
@@ -90,13 +89,13 @@ const taxMachine = createMachine({
                       selected: true,
                     };
                   }
-        
+
                   return updatedCategory;
                 }
-        
+
                 return category;
               });
-        
+
               // Validate the total percentage if necessary
               const totalEnteredPercentage = updatedCategories.reduce((total, category) => {
                 const [key, value] = Object.entries(category)[0];
@@ -105,13 +104,13 @@ const taxMachine = createMachine({
                 }
                 return total;
               }, 0);
-        
+
               if (totalEnteredPercentage > 100) {
                 console.error("Total percentage exceeds 100%");
                 // Handle the error case where total percentage exceeds 100%
                 return context.categories; // Return the original categories context
               }
-        
+
               return updatedCategories;
             },
           }),
@@ -119,7 +118,7 @@ const taxMachine = createMachine({
         DESELECT_CATEGORY: {
           actions: assign({
             selectedCategories: (context, event) => {
-              p(SOURCE,context.event,srcColor,"event")
+              p(SOURCE, context.event, srcColor, "event")
               const categoryName = context.event.category;
               // Filter out the deselected category from selectedCategories array
               return context.context.selectedCategories.filter(cat => cat !== categoryName);
@@ -142,12 +141,12 @@ const taxMachine = createMachine({
                 }
                 return category;
               });
-        
+
               // Calculate the total number of remaining selected categories
               const remainingSelectedCategories = updatedCategories.filter(
                 category => Object.values(category)[0].selected
               );
-        
+
               const enabledCategoriesCount = remainingSelectedCategories.length;
               const totalPercentageCategories = remainingSelectedCategories.reduce(
                 (acc, category) => {
@@ -158,7 +157,7 @@ const taxMachine = createMachine({
                 },
                 0
               );
-        
+
               // Calculate and update amounts for the remaining selected categories
               const recalculatedCategories = updatedCategories.map(category => {
                 const categoryObject = Object.values(category)[0];
@@ -182,7 +181,7 @@ const taxMachine = createMachine({
                 }
                 return category;
               });
-        
+
               return recalculatedCategories;
             },
           }),
@@ -190,19 +189,26 @@ const taxMachine = createMachine({
         CHANGE_MODE: {
           actions: assign({
             categories: (context, event) => {
-              return context.categories.map(category => {
-                if (Object.keys(category)[0] === event.categoryName) {
-                  let updatedCategory = { ...category };
-                  updatedCategory[event.categoryName].mode = event.newMode;
+              // Ensure that categories and selectedCategories are accessed correctly.
+              const categories = context.context.categories;
+              const selectedCategories = context.context.selectedCategories;  // This should be an array of strings.
 
-                  if (event.newMode === "dollar") {
-                    updatedCategory[event.categoryName].amountDisplayed = updatedCategory[event.categoryName].amountEntered.amount || context.TAX_AMOUNT / context.selectedCategories.length;
-                  } else if (event.newMode === "percentage") {
-                    const amount = updatedCategory[event.categoryName].amountEntered.amount || context.TAX_AMOUNT / context.selectedCategories.length;
-                    updatedCategory[event.categoryName].amountDisplayed = (amount / context.TAX_AMOUNT) * 100;
+              return categories.map(category => {
+                const categoryName = Object.keys(category)[0];
+                if (categoryName === context.event.categoryName) {
+                  let updatedCategory = { ...category[categoryName] };
+                  updatedCategory.mode = context.event.newMode;
+
+                  // Use selectedCategories.length to divide TAX_AMOUNT.
+                  if (context.event.newMode === "dollar") {
+                    p(SOURCE, selectedCategories, srcColor, "selectedCategories.length");
+                    updatedCategory.amountDisplayed = updatedCategory.amountEntered.amount || context.context.TAX_AMOUNT / selectedCategories.length;
+                  } else if (context.event.newMode === "percentage") {
+                    const amount = updatedCategory.amountEntered.amount || context.context.TAX_AMOUNT / selectedCategories.length;
+                    updatedCategory.amountDisplayed = (amount / context.context.TAX_AMOUNT) * 100;
                   }
 
-                  return updatedCategory;
+                  return { [categoryName]: updatedCategory };
                 }
                 return category;
               })
@@ -212,22 +218,50 @@ const taxMachine = createMachine({
         UPDATE_AMOUNT_ENTERED: {
           actions: assign({
             categories: (context, event) => {
-              return context.categories.map(category => {
-                if (Object.keys(category)[0] === event.categoryName) {
-                  let updatedCategory = { ...category };
-                  updatedCategory[event.categoryName].amountEntered.amount = parseFloat(event.amount);
-
-                  if (updatedCategory[event.categoryName].mode === 'dollar') {
-                    updatedCategory[event.categoryName].amountDisplayed = parseFloat(event.amount);
-                  } else {
-                    updatedCategory[event.categoryName].amountDisplayed = (parseFloat(event.amount) / context.TAX_AMOUNT) * 100;
+              const { categoryName, amount } = context.event;
+              
+              return context.context.categories.map(category => {
+                  const currentCategoryName = Object.keys(category)[0];
+                  
+                  if (currentCategoryName === categoryName) {
+                      // Create a copy of the current category
+                      let updatedCategory = { ...category };
+                      // Access the category details object
+                      let categoryDetails = updatedCategory[currentCategoryName];
+                      
+                      // Update `amountEntered`
+                      categoryDetails.amountEntered.specified = true;
+                      categoryDetails.amountEntered.amount = parseFloat(amount);
+                      
+                      // Calculate `amountDisplayed` based on the mode
+                      if (categoryDetails.mode === 'dollar') {
+                          // Update `amountDisplayed` directly
+                          categoryDetails.amountDisplayed = parseFloat(amount);
+                      } else if (categoryDetails.mode === 'percent') {
+                          // Calculate the dollar value based on percentage and `TotalRemainingAmount`
+                          if (context.context.TotalRemainingAmount > 0) {
+                              categoryDetails.amountDisplayed = (parseFloat(amount) / 100) * context.context.TotalRemainingAmount;
+                              // Optional: Control the precision of the calculated `amountDisplayed`
+                              categoryDetails.amountDisplayed = parseFloat(categoryDetails.amountDisplayed.toFixed(2));
+                          } else {
+                              // Handle edge case where `TotalRemainingAmount` is zero or invalid
+                              p(SOURCE, "TotalRemainingAmount is zero or invalid", srcColor, "Error");
+                          }
+                      }
+                      
+                      // Debug logging
+                      p(SOURCE, updatedCategory, srcColor, `updated ${categoryName}'s amountEntered`);
+                      
+                      // Return the updated category
+                      return updatedCategory;
                   }
-
-                  return updatedCategory;
-                }
-                return category;
+                  
+                  // Return the unmodified category
+                  return category;
               });
-            },
+          }
+          
+            ,
           }),
         },
         CALCULATE_TOTAL_REMAINING_AMOUNT: {
