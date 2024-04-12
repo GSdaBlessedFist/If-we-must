@@ -119,48 +119,72 @@ const taxMachine = createMachine({
         DESELECT_CATEGORY: {
           actions: assign({
             selectedCategories: (context, event) => {
+              p(SOURCE,context.event,srcColor,"event")
               const categoryName = context.event.category;
-              p(SOURCE,categoryName,srcColor,"DESELECT_CATEGORY: category removed")
-              p(SOURCE,context.selecting_categories,srcColor+5,"DESELECT_CATEGORY: selectedCategories")
+              // Filter out the deselected category from selectedCategories array
               return context.context.selectedCategories.filter(cat => cat !== categoryName);
             },
-            categories: (context) => {
-              const enabledCategories = context.context.selectedCategories.filter(
-                (category) => category.selected
+            categories: (context, event) => {
+              const categoryName = context.event.category;
+              // Map through categories to update the selected property and other attributes
+              const updatedCategories = context.context.categories.map(category => {
+                const [key, value] = Object.entries(category)[0];
+                if (key === categoryName) {
+                  // Deselect the category and reset the amountDisplayed
+                  return {
+                    ...category,
+                    [key]: {
+                      ...value,
+                      selected: false,
+                      amountDisplayed: 0, // Reset amountDisplayed to zero or another appropriate value
+                    }
+                  };
+                }
+                return category;
+              });
+        
+              // Calculate the total number of remaining selected categories
+              const remainingSelectedCategories = updatedCategories.filter(
+                category => Object.values(category)[0].selected
               );
-              const enabledCategoriesCount = enabledCategories.length;
-              const totalPercentageCategories = enabledCategories.reduce(
+        
+              const enabledCategoriesCount = remainingSelectedCategories.length;
+              const totalPercentageCategories = remainingSelectedCategories.reduce(
                 (acc, category) => {
-                  const categoryObject = category[Object.keys(category)[0]];
+                  const categoryObject = Object.values(category)[0];
                   return categoryObject.mode === "percentage"
-                    ? acc + 1
+                    ? acc + categoryObject.amountEntered.amount
                     : acc;
                 },
                 0
               );
-
-              const updatedCategories = context.context.categories.map((category) => {
-                if (category[Object.keys(category)[0]].selected) {
-                  const categoryObject = category[Object.keys(category)[0]];
-                  let categoryAmount = 0;
+        
+              // Calculate and update amounts for the remaining selected categories
+              const recalculatedCategories = updatedCategories.map(category => {
+                const categoryObject = Object.values(category)[0];
+                if (categoryObject.selected) {
+                  let newAmountDisplayed = 0;
                   if (categoryObject.mode === "percentage") {
-                    const remainingPercentage = 100 - totalPercentageCategories * (100 / enabledCategoriesCount);
-                    categoryAmount = (remainingPercentage / 100) * context.TotalRemainingAmount;
+                    // Calculate amount based on remaining percentage and total remaining amount
+                    const remainingPercentage = 100 - totalPercentageCategories;
+                    newAmountDisplayed = (categoryObject.amountEntered.amount / remainingPercentage) * context.TotalRemainingAmount;
                   } else {
-                    categoryAmount = context.TotalRemainingAmount / enabledCategoriesCount;
+                    // Calculate amount based on remaining total remaining amount and enabled categories count
+                    newAmountDisplayed = context.TotalRemainingAmount / enabledCategoriesCount;
                   }
                   return {
                     ...category,
                     [Object.keys(category)[0]]: {
                       ...categoryObject,
-                      amountDisplayed: categoryAmount,
+                      amountDisplayed: newAmountDisplayed,
                     },
                   };
                 }
                 return category;
               });
-              return updatedCategories;
-            }
+        
+              return recalculatedCategories;
+            },
           }),
         },
         CHANGE_MODE: {

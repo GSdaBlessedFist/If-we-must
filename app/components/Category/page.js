@@ -93,11 +93,11 @@ export default function Category({ categoryName }) {
   
   // useEffect(()=>{},[])
   useEffect(()=>{
-    p(SOURCE,categories[categoryName],srcColor,"categories[categoryName]")
-  },[])
+    p(SOURCE,categories[0][categoryName]?.amountDisplayed,srcColor,`category: ${categoryName}`)
+    
+  },[state.context])
 
-
-
+  
   
   // useEffect(() => {
   //   setPlaceholderValue((totalRemainingAmount === 0) ? localStorage.getItem("tax_amount") : totalRemainingAmount)//👀
@@ -138,7 +138,8 @@ export default function Category({ categoryName }) {
         </div>
         <div className={styles.amountSection}>
           <div className={styles.amountHeader}>Calculated:</div>
-          <div className={styles.amountDisplayed}>10</div>
+          {/* <div className={styles.amountDisplayed}>{categories[0][categoryName].amountDisplayed || 0}</div> */}
+          <div className={styles.amountDisplayed}>{categoryName}</div>
         </div>
       </div>
     </>
