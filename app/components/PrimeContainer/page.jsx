@@ -7,24 +7,24 @@ import styles from "./primeContainer.module.scss";
 import { TaxAmountProvider } from "../../contexts/TaxAmountProvider";
 import { TotalRemainingAmountProvider } from "../../contexts/TotalRemainingAmountProvider";
 import { CategoryObjectsProvider } from "../../contexts/CategoryObjectsProvider";
-
+import { TaxMachineProvider } from "../../contexts/TaxMachineProvider";
 
 export default function PrimeContainer() {
   return (
     <>
-      <TaxAmountProvider>
-        <TotalRemainingAmountProvider>
-          <CategoryObjectsProvider>
-            
+      <TaxMachineProvider>
+        {/* <TaxAmountProvider>
+          <TotalRemainingAmountProvider>
+            <CategoryObjectsProvider>*/}
               <div className={styles.primeContainer}>
                 <Header />
                 <Main />
-                <Footer />
+                {/* <Footer /> */}
               </div>
-            
-          </CategoryObjectsProvider>
-        </TotalRemainingAmountProvider>
-      </TaxAmountProvider>
+            {/* </CategoryObjectsProvider>
+          </TotalRemainingAmountProvider>
+        </TaxAmountProvider> */}
+      </TaxMachineProvider>
     </>
   );
 }

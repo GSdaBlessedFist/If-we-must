@@ -1,46 +1,55 @@
 "use client";
 import { useEffect, useState, useContext } from "react";
 import styles from "./header.module.scss";
-import { useTaxAmountContext } from "../../contexts/TaxAmountProvider";
-import { useTotalRemainingAmountContext } from "../../contexts/TotalRemainingAmountProvider";
-import { useCategoryObjectsContext } from "../../contexts/CategoryObjectsProvider";
+// import { useTaxAmountContext } from "../../contexts/TaxAmountProvider";
+// import { useTotalRemainingAmountContext } from "../../contexts/TotalRemainingAmountProvider";
+// import { useCategoryObjectsContext } from "../../contexts/CategoryObjectsProvider";
+import { useTaxMachineContext } from "../../contexts/TaxMachineProvider";
 import p from "../../util/consoleHelper";
 import validate from "./validator";
+import _debounce from 'lodash/debounce';
 
 const SOURCE = "Header Component";
 const srcColor = 185;
 
 export default function Header() {
-  const { TAX_AMOUNT,updateTaxAmount } = useTaxAmountContext();
-  const {
-    totalRemainingAmount,
-    updateTotalRemainingAmount,
-  } = useTotalRemainingAmountContext();
-  const {
-    catObjects,
-    categoriesWithSpecifiedAmount,
-    updateSelectedStatus,
-    updateMode,
-    updateAmountEntered,
-    updateAmountDisplayed,
-  } = useCategoryObjectsContext();
+  const { state, setTaxAmount, selectCategory, deselectCategory } = useTaxMachineContext();
+  const [inputValue, setInputValue] = useState('');
 
+  const {TAX_AMOUNT,TotalRemainingAmount} = state.context;
+
+  
   function handleUpdateTaxAmount(e) {
-    e.preventDefault();
-    const inputValue = e.target.value;
-    updateTaxAmount(inputValue);
+    const newValue = parseInt(e.target.value) || 0;
+    p(SOURCE,newValue,srcColor,"tax amount");
+    setTaxAmount(newValue);
+    setInputValue(newValue);
+    //debouncedHandleUpdateTaxAmount(newValue);
   }
+
+  const debouncedHandleUpdateTaxAmount = _debounce((value) => {
+    setTaxAmount(value);
+  }, 750);
 
   function updateCategorySelectStatus(e) {
     const categoryName = e.target.name;
     const selected = e.target.checked;
-
-    updateSelectedStatus(categoryName, selected);
+    if (selected) {
+      selectCategory(categoryName);
+    } else {
+      deselectCategory(categoryName)
+    }
   }
 
   useEffect(() => {
     localStorage.setItem("tax_amount", TAX_AMOUNT);
+    p(SOURCE,TAX_AMOUNT,srcColor,"TAX_AMOUNT");
+    p(SOURCE,TotalRemainingAmount,srcColor+25,"Total Remaining Amount"); 
   }, [TAX_AMOUNT]);
+
+  useState(() => {
+    p(SOURCE,state.context.selectedCategories,srcColor+12,"selectedCategories")
+  },[state.context.selectedCategories]); 
 
   return (
     <div className={styles.header}>
@@ -51,17 +60,17 @@ export default function Header() {
             <input
               type="text"
               className={styles.taxAmount}
-              value={TAX_AMOUNT}
+              value={inputValue}
               onChange={handleUpdateTaxAmount}
               maxLength="5"
             />
           </div>
-          {TAX_AMOUNT ? (
+          {TAX_AMOUNT  ? (
             <div className={styles.remainingAmountSection}>
               <h2 className="text-bright-full">Remaining: $</h2>
               <div className="w-12 m-3">
-                {totalRemainingAmount
-                  ? totalRemainingAmount
+                {TotalRemainingAmount
+                  ? TotalRemainingAmount
                   : TAX_AMOUNT}
               </div>
               <div className="w-12 m-3"></div>
