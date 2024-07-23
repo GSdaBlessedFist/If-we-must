@@ -2,7 +2,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useMachine } from '@xstate/react';
 import taxMachine from './machines/taxMachine';
-const sectorsList = ["sector1", "sector2", "sector3", "sector4"];
+import Header from './components/Header';
+import SectorButtons from "./components/SectorButtons";
+import SectorForm from "./components/SectorForm";
+import "./globals.scss";
+
+const sectorsList = ["sector1", "sector2", "sector3", "sector4","sector5", "sector6", "sector7", "sector8"];
 
 export default function Home() {
   const [state, send] = useMachine(taxMachine);
@@ -36,46 +41,27 @@ export default function Home() {
       setUnspecifedCount((prev) => prev - 1); // Decrement correctly
       send({ type: 'DESELECT SECTOR', value });
     }
-    //setUnspecifedCount(()=>sectorsSelected.filter(sector => sector.amountEntered !== 0).length | 1)    
   }
   const handleSpecifiedAmountChange = (e, index) => {
     const { value } = e.target;
     const updatedSectors = [...sectorsSelected];
     updatedSectors[index].amountEntered = parseFloat(value) || 0; // Ensure amountEntered is a number
     setSectorsSelected(updatedSectors);
-
   };
-  /////////////////////////////////
-  /////////////////////////////////
-  /////////////////////////////////
-
-
-
   const totalSpecifiedAmount = useMemo(() => {
     return sectorsSelected.reduce((acc, sector) => acc + sector.amountEntered, 0);
   }, [sectorsSelected]);
-
-
-
+  /////////////////////////////////
+  /////////////////////////////////
+  /////////////////////////////////
   useEffect(() => {
     setTotalRemainingAmount(TAX_AMOUNT - totalSpecifiedAmount);
     send({ type: 'UPDATE SPECIFIED AMOUNT', value: totalSpecifiedAmount });
   }, [totalSpecifiedAmount, TAX_AMOUNT]);
-
-
-
-
-
-  // useEffect(() => {
-  //   setUnspecifedCount(() => sectorsSelected.filter(sector => sector.amountEntered !== 0).length | 1)
-
-  // }, [sectorsSelected]);
-
   useEffect(() => {
     let totalSpecified = 0;
     let unspecifiedCount = 0;
     let placeholderAmount = 0;
-
     sectorsSelected.forEach((sector) => {
       if (sector.amountEntered !== 0) {
         totalSpecified += sector.amountEntered;
@@ -83,60 +69,25 @@ export default function Home() {
         unspecifiedCount++;
       }
     });
-
     if (unspecifiedCount > 0) {
       placeholderAmount = totalRemainingAmount / unspecifiedCount;
       console.log(placeholderAmount)
     }
-
     console.log(`totalSpecifiedAmount: $${totalSpecifiedAmount}`)
     console.log(`unspecifiedCount: ${unspecifiedCount}`)
     setPlaceholder(placeholderAmount.toFixed(2));
   }, [sectorsSelected, totalRemainingAmount]);
-
-  
   /////////////////////////////////
   /////////////////////////////////
   /////////////////////////////////
-
-
   return (
     <>
-      <div>
-        <h2>TAX AMOUNT header section</h2>
-        <input type="text" value={TAX_AMOUNT} onChange={handleTAX_AMOUNTChange} className='p-2 w-12 text-black' />
+      <div id="mainContainer" style={{width:"clamp(700px,66.7%,800px)"}} className='rounded-lg border-8 border-primary '>
+        <Header TAX_AMOUNT={TAX_AMOUNT} handleTAX_AMOUNTChange={handleTAX_AMOUNTChange} totalRemainingAmount={totalRemainingAmount} />
+        <SectorButtons sectorsList={sectorsList} buttonsEnabled={buttonsEnabled} handleSectorSelection={handleSectorSelection} />
+        <SectorForm sectorsSelected={sectorsSelected} placeholder={placeholder} handleSpecifiedAmountChange={handleSpecifiedAmountChange}/>
+        
       </div>
-      {(!buttonsEnabled) ? "" :
-        (
-          <div id="buttonsSection" className='flex'>
-            {sectorsList.map((sector) => (
-              <div key={sector} className=' m-2 '>
-                <button className="border" onClick={handleSectorSelection} value={sector}>{sector}</button>
-              </div>
-            ))}
-          </div>
-        )}
-      <div>Total Remaining Amount: ${totalRemainingAmount.toFixed(2)}</div>
-      <br />
-      {sectorsSelected.length > 0 && (
-        <div id="sectorsSection">
-          <h3>Selected Sectors:</h3>
-          <ul>
-            {sectorsSelected.map((sector, index) => (
-              <div key={index} className='border w-24 p-4 text-white'>
-                <div>{sector.id}</div>
-                <input
-                  className="w-16 dark:text-black"
-                  type="text"
-                  placeholder={placeholder}
-                  onChange={(e) => handleSpecifiedAmountChange(e, index)}
-                />
-              </div>
-            ))}
-          </ul>
-        </div>
-      )}
     </>
   );
 }
-

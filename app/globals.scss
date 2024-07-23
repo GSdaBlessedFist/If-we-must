@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --primaryHue: 210;
+    --secondaryHue: 120;
+    --bgHue: 217;
+
+    --primaryColor: hsl(var(--primaryHue), 70%, 50%);
+    --secondaryColor: hsl(var(--secondaryHue), 70%, 50%);
+    
+    --backgroundLight: hsl(var(--bgHue), 33%, 57%);
+    --backgroundDark: hsl(var(--bgHue), 33%, 17%);
+}
+
+*{box-sizing: border-box;}
+body{
+    @apply absolute w-full h-screen flex justify-center items-center text-primary bg-slate-200;
+}
