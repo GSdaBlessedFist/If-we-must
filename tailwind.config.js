@@ -9,7 +9,9 @@ module.exports = {
     extend: {
       colors: {
         primary: 'var(--primaryColor)',
+        primaryTint: 'var(--primaryTint)',
         secondary: 'var(--secondaryColor)',
+        secondaryTint: 'var(--secondaryTint)',
         backgroundLight: 'var(--backgroundLight)',
         backgroundDark: 'var(--backgroundDark)',
       },

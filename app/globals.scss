@@ -4,17 +4,20 @@
 
 :root {
     --primaryHue: 210;
-    --secondaryHue: 120;
-    --bgHue: 217;
+    --secondaryHue: 130;
+    --tint: 85%;
 
     --primaryColor: hsl(var(--primaryHue), 70%, 50%);
+    --primaryTint: hsl(var(--primaryHue), 70%, var(--tint));
     --secondaryColor: hsl(var(--secondaryHue), 70%, 50%);
+    --secondaryTint: hsl(var(--secondaryHue), 70%, var(--tint));
     
-    --backgroundLight: hsl(var(--bgHue), 33%, 57%);
-    --backgroundDark: hsl(var(--bgHue), 33%, 17%);
+    --backgroundLight: hsl(var(--primaryHue), 35%, 75%);
+    --backgroundDark: hsl(var(--primaryHue), 50%, 25%);
 }
 
 *{box-sizing: border-box;}
 body{
-    @apply absolute w-full h-screen flex justify-center items-center text-primary bg-slate-200;
+    background: var(--backgroundLight);
+    @apply absolute w-full h-screen flex justify-center items-center text-primary;
 }
