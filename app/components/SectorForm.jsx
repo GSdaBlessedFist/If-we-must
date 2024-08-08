@@ -21,7 +21,7 @@ function SectorForm({ ...props }) {
     ).length;
     const updatedSectors = sectorsSelected.map((sector) => {
       if (sector.amountEntered === 0) {
-        const newAmount = totalRemainingAmount / numberOfUnspecifiedSectors;
+        const newAmount = Math.floor(totalRemainingAmount / numberOfUnspecifiedSectors);
         console.log(`newAmount: ${newAmount}`);
         return { ...sector, amountEntered: newAmount };
       } else {
